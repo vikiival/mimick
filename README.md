@@ -122,3 +122,24 @@ More details will be added later.
 ## Disclaimer
 
 This is alpha-quality software. Expect some bugs and incompatible changes in coming weeks.
+
+## Hacks
+
+The following hacks are used to make the template work:
+
+### 1. Update the storage in ABI
+
+[HACK URL](https://github.com/Cardinal-Cryptography/indexer/pull/1/files#diff-198e7215cc0ef863208df6bb3240d27c07af189a7dcf3a686ffb056663967359L396-R399)
+
+In your ABI replace storage with this
+
+```json
+{
+    "storage": {
+      "cell": {
+        "key": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "ty": 0
+      }
+    }
+}
+```
