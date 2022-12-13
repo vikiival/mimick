@@ -1,4 +1,4 @@
-import { CallHandlerContext, EventHandlerContext } from '@subsquid/substrate-processor';
+import { CallHandlerContext, EventHandlerContext, ContractsContractEmittedHandlerContext } from '@subsquid/substrate-processor';
 import { EntityManager } from 'typeorm';
 // import { Interaction } from '../../model/generated/_interaction';
 // import { Attribute } from '../../model/generated/_attribute';
@@ -39,7 +39,7 @@ export type BaseCall = {
 // }
 
 export type Store = EntityManager;
-export type Context = CallHandlerContext<Store>;
+export type Context = ContractsContractEmittedHandlerContext<Store>;
 export type MetaContext = CallHandlerContext<Store> | EventHandlerContext<Store>;
 
 // export type Optional<T> = T | null;
