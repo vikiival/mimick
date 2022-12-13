@@ -3,6 +3,8 @@
 // import { Context, EvmLogHandlerOptions, Interaction } from './types'
 // import { EvmLog, getEvmLog } from '@subsquid/ink-abi'
 
+import { DataSelection } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
+
 // export type RealTransferEvent = psp34.Event_Transfer
 
 
@@ -30,24 +32,8 @@
 //   return Interaction.SEND
 // }
 
-// export function decode721Transfer(ctx: Context): psp34.Transfer0Event {
-//   const log = getEvmLog(ctx, ctx.event.)
-//   return psp34.events["Transfer(address,address,uint256)"].decode(log)
-// }
-
-// export function decode1155SingleTransfer(ctx: Context): erc1155.TransferSingle0Event {
-//   const log = getEvmLog(ctx, ctx.event)
-//   return erc1155.events["TransferSingle(address,address,address,uint256,uint256)"].decode(log)
-// }
-
-// export function decode1155MultiTransfer(ctx: Context): erc1155.TransferBatch0Event {
-//   const log = getEvmLog(ctx, ctx.event)
-//   return erc1155.events["TransferBatch(address,address,address,uint256[],uint256[])"].decode(log)
-// }
-
-
-
-// export const transferFilter: EvmLogHandlerOptions = {
-//   filter: [psp34.e["Transfer(address,address,uint256)"].topic],
-// }
-
+export const contractFilter: DataSelection<{event: {args: boolean}}> = {
+  data: {
+    event: {args: true}
+  }
+}
