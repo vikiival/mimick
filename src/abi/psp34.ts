@@ -1566,23 +1566,23 @@ export interface Event_Approval {
     approved: boolean
 }
 
-export type Message = Message_PSP34::balance_of | Message_PSP34::owner_of | Message_PSP34::allowance | Message_PSP34::approve | Message_PSP34::collection_id | Message_PSP34::total_supply | Message_PSP34::transfer | Message_PSP34Enumerable::token_by_index | Message_PSP34Enumerable::owners_token_by_index | Message_PSP34Metadata::get_attribute | Message_Ownable::owner | Message_Ownable::renounce_ownership | Message_Ownable::transfer_ownership | Message_PayableMint::max_supply | Message_PayableMint::price | Message_PayableMint::set_base_uri | Message_PayableMint::withdraw | Message_PayableMint::mint_for | Message_PayableMint::mint_next | Message_PayableMint::token_uri
+export type Message = Message_PSP34_balance_of | Message_PSP34_owner_of | Message_PSP34_allowance | Message_PSP34_approve | Message_PSP34_collection_id | Message_PSP34_total_supply | Message_PSP34_transfer | Message_PSP34Enumerable_token_by_index | Message_PSP34Enumerable_owners_token_by_index | Message_PSP34Metadata_get_attribute | Message_Ownable_owner | Message_Ownable_renounce_ownership | Message_Ownable_transfer_ownership | Message_PayableMint_max_supply | Message_PayableMint_price | Message_PayableMint_set_base_uri | Message_PayableMint_withdraw | Message_PayableMint_mint_for | Message_PayableMint_mint_next | Message_PayableMint_token_uri
 
 /**
  *  Returns the balance of the owner.
  * 
  *  This represents the amount of unique tokens the owner has.
  */
-export interface Message_PSP34::balance_of {
-    __kind: 'PSP34::balance_of'
+export interface Message_PSP34_balance_of {
+    __kind: 'PSP34_balance_of'
     owner: Uint8Array
 }
 
 /**
  *  Returns the owner of the token if any.
  */
-export interface Message_PSP34::owner_of {
-    __kind: 'PSP34::owner_of'
+export interface Message_PSP34_owner_of {
+    __kind: 'PSP34_owner_of'
     id: Id
 }
 
@@ -1590,8 +1590,8 @@ export interface Message_PSP34::owner_of {
  *  Returns `true` if the operator is approved by the owner to withdraw `id` token.
  *  If `id` is `None`, returns `true` if the operator is approved to withdraw all owner's tokens.
  */
-export interface Message_PSP34::allowance {
-    __kind: 'PSP34::allowance'
+export interface Message_PSP34_allowance {
+    __kind: 'PSP34_allowance'
     owner: Uint8Array
     operator: Uint8Array
     id: (Id | undefined)
@@ -1609,8 +1609,8 @@ export interface Message_PSP34::allowance {
  * 
  *  Returns `NotApproved` error if caller is not owner of `id`.
  */
-export interface Message_PSP34::approve {
-    __kind: 'PSP34::approve'
+export interface Message_PSP34_approve {
+    __kind: 'PSP34_approve'
     operator: Uint8Array
     id: (Id | undefined)
     approved: boolean
@@ -1621,15 +1621,15 @@ export interface Message_PSP34::approve {
  * 
  *  This can represents the relationship between tokens/contracts/pallets.
  */
-export interface Message_PSP34::collection_id {
-    __kind: 'PSP34::collection_id'
+export interface Message_PSP34_collection_id {
+    __kind: 'PSP34_collection_id'
 }
 
 /**
  *  Returns current NFT total supply.
  */
-export interface Message_PSP34::total_supply {
-    __kind: 'PSP34::total_supply'
+export interface Message_PSP34_total_supply {
+    __kind: 'PSP34_total_supply'
 }
 
 /**
@@ -1645,8 +1645,8 @@ export interface Message_PSP34::total_supply {
  * 
  *  Returns `SafeTransferCheckFailed` error if `to` doesn't accept transfer.
  */
-export interface Message_PSP34::transfer {
-    __kind: 'PSP34::transfer'
+export interface Message_PSP34_transfer {
+    __kind: 'PSP34_transfer'
     to: Uint8Array
     id: Id
     data: Uint8Array
@@ -1658,8 +1658,8 @@ export interface Message_PSP34::transfer {
  * 
  *  The start index is zero.
  */
-export interface Message_PSP34Enumerable::token_by_index {
-    __kind: 'PSP34Enumerable::token_by_index'
+export interface Message_PSP34Enumerable_token_by_index {
+    __kind: 'PSP34Enumerable_token_by_index'
     index: bigint
 }
 
@@ -1669,8 +1669,8 @@ export interface Message_PSP34Enumerable::token_by_index {
  * 
  *  The start index is zero.
  */
-export interface Message_PSP34Enumerable::owners_token_by_index {
-    __kind: 'PSP34Enumerable::owners_token_by_index'
+export interface Message_PSP34Enumerable_owners_token_by_index {
+    __kind: 'PSP34Enumerable_owners_token_by_index'
     owner: Uint8Array
     index: bigint
 }
@@ -1680,8 +1680,8 @@ export interface Message_PSP34Enumerable::owners_token_by_index {
  * 
  *  If `id` is a collection id of the token, it returns attributes for collection.
  */
-export interface Message_PSP34Metadata::get_attribute {
-    __kind: 'PSP34Metadata::get_attribute'
+export interface Message_PSP34Metadata_get_attribute {
+    __kind: 'PSP34Metadata_get_attribute'
     id: Id
     key: Uint8Array
 }
@@ -1689,8 +1689,8 @@ export interface Message_PSP34Metadata::get_attribute {
 /**
  *  Returns the address of the current owner.
  */
-export interface Message_Ownable::owner {
-    __kind: 'Ownable::owner'
+export interface Message_Ownable_owner {
+    __kind: 'Ownable_owner'
 }
 
 /**
@@ -1706,8 +1706,8 @@ export interface Message_Ownable::owner {
  * 
  *  Panics with `CallerIsNotOwner` error if caller is not owner
  */
-export interface Message_Ownable::renounce_ownership {
-    __kind: 'Ownable::renounce_ownership'
+export interface Message_Ownable_renounce_ownership {
+    __kind: 'Ownable_renounce_ownership'
 }
 
 /**
@@ -1722,40 +1722,40 @@ export interface Message_Ownable::renounce_ownership {
  * 
  *  Panics with `NewOwnerIsZero` error if new owner's address is zero.
  */
-export interface Message_Ownable::transfer_ownership {
-    __kind: 'Ownable::transfer_ownership'
+export interface Message_Ownable_transfer_ownership {
+    __kind: 'Ownable_transfer_ownership'
     newOwner: Uint8Array
 }
 
-export interface Message_PayableMint::max_supply {
-    __kind: 'PayableMint::max_supply'
+export interface Message_PayableMint_max_supply {
+    __kind: 'PayableMint_max_supply'
 }
 
-export interface Message_PayableMint::price {
-    __kind: 'PayableMint::price'
+export interface Message_PayableMint_price {
+    __kind: 'PayableMint_price'
 }
 
-export interface Message_PayableMint::set_base_uri {
-    __kind: 'PayableMint::set_base_uri'
+export interface Message_PayableMint_set_base_uri {
+    __kind: 'PayableMint_set_base_uri'
     uri: SetBaseUriInput1
 }
 
-export interface Message_PayableMint::withdraw {
-    __kind: 'PayableMint::withdraw'
+export interface Message_PayableMint_withdraw {
+    __kind: 'PayableMint_withdraw'
 }
 
-export interface Message_PayableMint::mint_for {
-    __kind: 'PayableMint::mint_for'
+export interface Message_PayableMint_mint_for {
+    __kind: 'PayableMint_mint_for'
     to: Uint8Array
     mintAmount: bigint
 }
 
-export interface Message_PayableMint::mint_next {
-    __kind: 'PayableMint::mint_next'
+export interface Message_PayableMint_mint_next {
+    __kind: 'PayableMint_mint_next'
 }
 
-export interface Message_PayableMint::token_uri {
-    __kind: 'PayableMint::token_uri'
+export interface Message_PayableMint_token_uri {
+    __kind: 'PayableMint_token_uri'
     tokenId: bigint
 }
 
