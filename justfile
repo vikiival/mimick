@@ -76,3 +76,11 @@ update-deps:
 tail TAG:
 	npx sqd squid logs mimick@{{TAG}} -f
 
+dump:
+	docker exec -i mimick-db-1 /bin/bash -c "pg_dump --username postgres squid" > dump.sql
+
+ink FILE OUT:
+  npx squid-ink-typegen --abi=src/abi/{{FILE}}.json --output=src/abi/{{OUT}}.ts
+
+psp TAG:
+	npx squid-ink-typegen --abi=src/abi/ERC{{TAG}}.json --output=src/abi/erc{{TAG}}.ts
