@@ -13,7 +13,7 @@ export function addressOf(address: Uint8Array | string): string {
   if (!value) {
     return '';
   }
-  return ss58.codec(42).encode(value);
+  return ss58.codec(5).encode(value);
 }
 
 export function possibleAddress(address?: Uint8Array | string | null): string {
