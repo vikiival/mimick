@@ -2,15 +2,13 @@ import { lookupArchive } from '@subsquid/archive-registry'
 import { SubstrateBatchProcessor } from '@subsquid/substrate-processor'
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import 'dotenv/config'
+import { CONTRACT_ADDRESS, STARTING_BLOCK } from './constants'
 
 import { handleTokenTransfer } from './mappings/psp34/transfer'
-
-const CONTRACT_ADDRESS = 'abXaTso17JvAekJoBYy3Aam92FQWxPsfxjag1fhncz2oraY'
 
 const database = new Database()
 const processor = new SubstrateBatchProcessor()
 
-const STARTING_BLOCK = 2_790_000 // 6000 or 1790000 for Prod
 
 processor.setBlockRange({ from: STARTING_BLOCK })
 processor.addContractsContractEmitted(
