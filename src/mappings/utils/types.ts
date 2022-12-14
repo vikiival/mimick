@@ -1,21 +1,19 @@
-import {
-  BatchContext,
-  CallHandlerContext,
-  EventHandlerContext,
-  ContractsContractEmittedHandlerContext,
-} from '@subsquid/substrate-processor'
-import { EntityManager } from 'typeorm'
 import type {
   BatchProcessorItem,
   SubstrateBatchProcessor,
 } from '@subsquid/substrate-processor'
+import { BatchContext } from '@subsquid/substrate-processor'
 import {
   AddEventItem,
   CallItem,
   EventItem,
 } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
-// import { Interaction } from '../../model/generated/_interaction';
-// import { Attribute } from '../../model/generated/_attribute';
+import md5 from 'md5'
+import { nanoid } from 'nanoid'
+import { EntityManager } from 'typeorm'
+
+import { Interaction } from '../../model/generated/_interaction'
+import { Attribute } from '../../model/generated/_attribute'
 
 export type BaseCall = {
   caller: string
@@ -23,15 +21,7 @@ export type BaseCall = {
   timestamp: Date
 }
 
-// export { Interaction };
-
-// export type CollectionInteraction = Interaction.MINT | Interaction.DESTROY;
-
-// type OneOfInteraction = Interaction;
-
-// export function collectionEventFrom(interaction: CollectionInteraction, basecall: BaseCall, meta: string): IEvent<CollectionInteraction> {
-//   return eventFrom<CollectionInteraction>(interaction, basecall, meta);
-// }
+export { Interaction }
 
 // export function eventFrom<T>(interaction: T, { blockNumber, caller, timestamp }: BaseCall, meta: string, currentOwner?: string): IEvent<T> {
 //   return {
@@ -81,15 +71,11 @@ export type MetaContext = Context
 //   meta: string;
 // }
 
-export type NftId = `${number}-${number}`
-
-export type BaseCollectionEvent = {
+export type BaseCollectionEvent = WithCaller & {
   id: string
-  caller: string
 }
 
-export type BaseTokenEvent = {
-  collectionId: string
+export type BaseTokenEvent = CollectionId & {
   sn: string
 }
 
@@ -97,53 +83,30 @@ export type OptionalMeta = {
   metadata?: string
 }
 
-// export type CreateCollectionEvent = BaseCollectionEvent & OptionalMeta & {
-//   type: string | CollectionType;
-// };
+export type CreateCollectionEvent = BaseCollectionEvent &
+  OptionalMeta & {
+    type: string
+  }
 
-export type CreateTokenEvent = BaseTokenEvent & {
-  caller: string
-  metadata?: string
-}
+export type CreateTokenEvent = BaseTokenEvent &
+  WithCount &
+  WithCaller & {
+    metadata: Promise<string>
+  }
 
-export type TransferTokenEvent = BaseTokenEvent & {
-  caller: string
+export type TransferTokenEvent = BaseTokenEvent & WithCaller & TransferTo
+
+export type BurnTokenEvent = BaseTokenEvent & WithCaller
+
+export type CallWith<T> = BaseCall & T
+
+type TransferTo = {
   to: string
 }
 
-export type ListTokenEvent = BaseTokenEvent & {
-  caller: string
-  price?: bigint
+type CollectionId = {
+  collectionId: string
 }
-
-export type BuyTokenEvent = ListTokenEvent & {
-  currentOwner: string
-}
-
-export type BurnTokenEvent = CreateTokenEvent
-
-export type DestroyCollectionEvent = BaseCollectionEvent
-
-export type AddRoyaltyEvent = BaseTokenEvent & {
-  recipient: string
-  royalty: number
-}
-
-export type PayRoyaltyEvent = AddRoyaltyEvent & WithAmount
-
-export type BaseOfferEvent = BaseTokenEvent & WithCaller
-
-export type OfferWithAmountEvent = BaseOfferEvent & WithAmount
-
-export type AcceptOfferEvent = OfferWithAmountEvent & {
-  maker: string
-}
-
-export type MakeOfferEvent = OfferWithAmountEvent & {
-  expiresAt: bigint
-}
-
-export type CallWith<T> = BaseCall & T
 
 export type EntityConstructor<T> = {
   new (...args: any[]): T
@@ -165,6 +128,10 @@ export type SomethingWithOptionalMeta = {
   metadata?: string
 }
 
+export type WithCount = {
+  count: bigint
+}
+
 export type UnwrapFunc<T> = (ctx: Context) => T
 export type SanitizerFunc = (url: string) => string
 
@@ -172,19 +139,15 @@ export function ensure<T>(value: unknown): T {
   return value as T
 }
 
-export const createTokenId = (collection: string, id: string): string =>
-  `${collection}-${id}`
+export function createTokenId(collection: string, id: string): string {
+  return `${collection}-${id}`
+}
 
-// export const eventId = (id: string, event: Interaction): string => `${id}-${event}-${nanoid()}`;
+export const eventId = (id: string, event: Interaction): string =>
+  `${id}-${event}-${nanoid()}`
 
 export const createOfferId = (id: string, caller: string): string =>
   `${id}-${caller}`
-
-const offerIdFrom = (collectionId: string, id: string, caller: string) =>
-  createOfferId(createTokenId(collectionId, id), caller)
-
-export const offerIdOf = (call: CallWith<BaseOfferEvent>): string =>
-  offerIdFrom(call.collectionId, call.sn, call.caller)
 
 export const tokenIdOf = (base: BaseTokenEvent): string =>
   createTokenId(base.collectionId, base.sn)

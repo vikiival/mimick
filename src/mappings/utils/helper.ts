@@ -1,6 +1,6 @@
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
-import { NftId, SomethingWithOptionalMeta } from './types'
+import { SomethingWithOptionalMeta } from './types'
 
 export function isEmpty(obj: Record<string, unknown>): boolean {
   // eslint-disable-next-line guard-for-in, @typescript-eslint/naming-convention
@@ -20,10 +20,6 @@ export function addressOf(address: Uint8Array | string): string {
 
 export function possibleAddress(address?: Uint8Array | string | null): string {
   return address ? addressOf(address) : ''
-}
-
-export function asNftId([collection, nft]: [number, number]): NftId {
-  return `${collection}-${nft}`
 }
 
 export function camelCase(str: string): string {
