@@ -1,11 +1,12 @@
 
-// import * as psp34 from '../../abi/psp34'
+import { ContractsContractEmittedEvent } from '@subsquid/substrate-processor'
+import { DataSelection } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
+import * as psp34 from '../../abi/psp34'
 // import { Context, EvmLogHandlerOptions, Interaction } from './types'
 // import { EvmLog, getEvmLog } from '@subsquid/ink-abi'
 
-import { DataSelection } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
 
-// export type RealTransferEvent = psp34.Event_Transfer
+export type RealEvent = psp34.Event
 
 
 // export const isMint = (addrOne: string, addrTwo: string) => {
@@ -31,6 +32,10 @@ import { DataSelection } from '@subsquid/substrate-processor/lib/interfaces/data
 
 //   return Interaction.SEND
 // }
+
+export function decodeEvent(item: ContractsContractEmittedEvent): psp34.Event {
+ return psp34.decodeEvent(item.args.data)
+}
 
 export const contractFilter: DataSelection<{event: {args: boolean}}> = {
   data: {
