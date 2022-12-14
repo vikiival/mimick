@@ -1,4 +1,3 @@
-
 import { ContractsContractEmittedEvent } from '@subsquid/substrate-processor'
 import { DataSelection } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
 import * as psp34 from '../../abi/psp34'
@@ -11,7 +10,6 @@ const EMPTY_ADDRESS = ''
 export type RealEvent = psp34.Event
 export type Transfer = psp34.Event_Transfer
 export type Approval = psp34.Event_Approval
-
 
 export const isMint = (addrOne: string, addrTwo: string): boolean => {
   return addrOne === EMPTY_ADDRESS && addrTwo !== EMPTY_ADDRESS
@@ -28,7 +26,7 @@ export const isTransfer = (addrOne: string, addrTwo: string): boolean => {
 export const whatIsThisTransfer = (transfer: Transfer): Interaction => {
   const from = possibleAddress(transfer.from)
   const to = possibleAddress(transfer.to)
-  
+
   if (isMint(from, to)) {
     return Interaction.MINTNFT
   }
@@ -40,11 +38,11 @@ export const whatIsThisTransfer = (transfer: Transfer): Interaction => {
 }
 
 export function decodeEvent(item: ContractsContractEmittedEvent): psp34.Event {
- return psp34.decodeEvent(item.args.data)
+  return psp34.decodeEvent(item.args.data)
 }
 
-export const contractFilter: DataSelection<{event: {args: boolean}}> = {
+export const contractFilter: DataSelection<{ event: { args: boolean } }> = {
   data: {
-    event: {args: true}
-  }
+    event: { args: true },
+  },
 }

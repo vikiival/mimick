@@ -1,12 +1,12 @@
-import singale from 'signale';
+import singale from 'signale'
 
-type ErrorCallback = (error: Error) => void;
+type ErrorCallback = (error: Error) => void
 
-export const logError = (e: Error | unknown, cb: ErrorCallback) => {
+export const logError = (e: Error | unknown, cb: ErrorCallback): void => {
   if (e instanceof Error) {
-    cb(e);
+    cb(e)
   }
-};
+}
 
 // eslint-disable-next-line import/no-default-export
-export default singale;
+export default singale

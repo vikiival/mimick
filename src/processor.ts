@@ -9,16 +9,12 @@ import { handleTokenTransfer } from './mappings/psp34/transfer'
 const database = new Database()
 const processor = new SubstrateBatchProcessor()
 
-
 processor.setBlockRange({ from: STARTING_BLOCK })
-processor.addContractsContractEmitted(
-    CONTRACT_ADDRESS,
-    {
-      data: {
-        event: { args: true },
-      },
-    } as const
-  )
+processor.addContractsContractEmitted(CONTRACT_ADDRESS, {
+  data: {
+    event: { args: true },
+  },
+} as const)
 
 const archive = lookupArchive('shibuya', { release: 'FireSquid' })
 
