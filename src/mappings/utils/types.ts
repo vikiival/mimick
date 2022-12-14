@@ -50,7 +50,7 @@ export type Processor = AddEventItem<EventItem<"*", false> | CallItem<"*", false
 }>>;
 export type Store = EntityManager;
 export type Context = BatchContext<Store, BatchProcessorItem<SubstrateBatchProcessor<Processor>>>
-export type MetaContext = CallHandlerContext<Store> | EventHandlerContext<Store>;
+export type MetaContext = Context
 
 // export type Optional<T> = T | null;
 
