@@ -1,6 +1,7 @@
 import { BatchBlock, ContractsContractEmittedEvent } from '@subsquid/substrate-processor'
 import { CONTRACT_ADDRESS } from '../../constants'
 import { decodeEvent, RealEvent } from './ink'
+import logger from './logger'
 import {
   BaseCall, Context, Processor
 } from './types'
@@ -43,6 +44,10 @@ function toBase(ctx: BatchBlock<Processor>): BaseCall {
 }
 
 function toBaseEvent(ctx: Processor): RealEvent | null {
+  logger.info(`[EVENT]`, ctx.name)
+  if (ctx.name === 'Contracts.ContractEmitted') {
+    logger.info(`[CONTRACT]`, ctx.event.args.contract, ctx.event.args.contract === CONTRACT_ADDRESS)
+  }
   if (ctx.name === 'Contracts.ContractEmitted' && ctx.event.args.contract === CONTRACT_ADDRESS) {
     const item = ctx.event as ContractsContractEmittedEvent;
     const event = decodeEvent(item);
