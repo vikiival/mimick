@@ -4,7 +4,6 @@ import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import 'dotenv/config'
 
 import { handleTokenTransfer } from './mappings/psp34/transfer'
-import { contractFilter } from './mappings/utils/ink'
 
 const CONTRACT_ADDRESS = 'abXaTso17JvAekJoBYy3Aam92FQWxPsfxjag1fhncz2oraY'
 
@@ -14,7 +13,14 @@ const processor = new SubstrateBatchProcessor()
 const STARTING_BLOCK = 2_790_000 // 6000 or 1790000 for Prod
 
 processor.setBlockRange({ from: STARTING_BLOCK })
-processor.addContractsContractEmitted(CONTRACT_ADDRESS, contractFilter)
+processor.addContractsContractEmitted(
+    CONTRACT_ADDRESS,
+    {
+      data: {
+        event: { args: true },
+      },
+    } as const
+  )
 
 const archive = lookupArchive('shibuya', { release: 'FireSquid' })
 
