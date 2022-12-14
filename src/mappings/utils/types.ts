@@ -4,6 +4,7 @@ import type {
   BatchProcessorItem,
   SubstrateBatchProcessor,
 } from '@subsquid/substrate-processor'
+import { AddEventItem, CallItem, EventItem } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
 // import { Interaction } from '../../model/generated/_interaction';
 // import { Attribute } from '../../model/generated/_attribute';
 
@@ -42,8 +43,13 @@ export type BaseCall = {
 //   });
 // }
 
+export type Processor = AddEventItem<EventItem<"*", false> | CallItem<"*", false>, EventItem<"Contracts.ContractEmitted", {
+  readonly event: {
+      readonly args: true;
+  };
+}>>;
 export type Store = EntityManager;
-export type Context = BatchContext<Store, BatchProcessorItem<SubstrateBatchProcessor>>
+export type Context = BatchContext<Store, BatchProcessorItem<SubstrateBatchProcessor<Processor>>>
 export type MetaContext = CallHandlerContext<Store> | EventHandlerContext<Store>;
 
 // export type Optional<T> = T | null;
