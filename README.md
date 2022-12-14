@@ -143,3 +143,7 @@ In your ABI replace storage with this
     }
 }
 ```
+
+### 2. Contract address needs to be set in the public-key format
+
+- `abXaTso17JvAekJoBYy3Aam92FQWxPsfxjag1fhncz2oraY` -> `0xce18fa994c9c20b8892ba6dd8c19b108df272f6ac196944b95e664560f94a554`
