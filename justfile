@@ -83,4 +83,4 @@ ink FILE OUT:
   npx squid-ink-typegen --abi=src/abi/{{FILE}}.json --output=src/abi/{{OUT}}.ts
 
 psp TAG:
-	npx squid-ink-typegen --abi=src/abi/ERC{{TAG}}.json --output=src/abi/erc{{TAG}}.ts
+	npx squid-ink-typegen --abi=src/abi/psp{{TAG}}.json --output=src/abi/psp{{TAG}}.ts
