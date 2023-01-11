@@ -2,13 +2,13 @@ import {Abi} from "@subsquid/ink-abi"
 
 export const metadata = {
   "source": {
-    "hash": "0xfe4bdd094362989115526d7f087d03d1af8dfde51c3bcb84e0a3f32005b34c2e",
+    "hash": "0x5cba62c6cd98a547c418890eacec6be708aefec40ab22170622e885d94f3a5c0",
     "language": "ink! 3.4.0",
     "compiler": "rustc 1.65.0-nightly"
   },
   "contract": {
-    "name": "shiden34",
-    "version": "0.2.0",
+    "name": "rmrk_contract",
+    "version": "0.5.0",
     "authors": [
       "Stake Technologies <devops@stake.co.jp>"
     ]
@@ -62,9 +62,38 @@ export const metadata = {
                 ],
                 "type": 6
               }
+            },
+            {
+              "label": "collection_metadata",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 7
+              }
+            },
+            {
+              "label": "_royalty_receiver",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            },
+            {
+              "label": "_royalty",
+              "type": {
+                "displayName": [
+                  "u8"
+                ],
+                "type": 2
+              }
             }
           ],
-          "docs": [],
+          "docs": [
+            "Instantiate new RMRK contract"
+          ],
           "label": "new",
           "payable": false,
           "selector": "0x9bae9d5e"
@@ -156,7 +185,7 @@ export const metadata = {
                 "displayName": [
                   "bool"
                 ],
-                "type": 26
+                "type": 38
               }
             }
           ],
@@ -164,116 +193,353 @@ export const metadata = {
             " Event emitted when a token approve occurs."
           ],
           "label": "Approval"
-        }
-      ],
-      "messages": [
-        {
-          "args": [
-            {
-              "label": "owner",
-              "type": {
-                "displayName": [
-                  "psp34_external",
-                  "BalanceOfInput1"
-                ],
-                "type": 8
-              }
-            }
-          ],
-          "docs": [
-            " Returns the balance of the owner.",
-            "",
-            " This represents the amount of unique tokens the owner has."
-          ],
-          "label": "PSP34::balance_of",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "psp34_external",
-              "BalanceOfOutput"
-            ],
-            "type": 4
-          },
-          "selector": "0xcde7e55f"
         },
         {
           "args": [
             {
-              "label": "id",
+              "docs": [],
+              "indexed": true,
+              "label": "to",
               "type": {
                 "displayName": [
-                  "psp34_external",
-                  "OwnerOfInput1"
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "collection",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "child",
+              "type": {
+                "displayName": [
+                  "Id"
                 ],
                 "type": 1
               }
             }
           ],
           "docs": [
-            " Returns the owner of the token if any."
+            " Event emitted when a new child is added."
           ],
-          "label": "PSP34::owner_of",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "psp34_external",
-              "OwnerOfOutput"
-            ],
-            "type": 19
-          },
-          "selector": "0x1168624d"
+          "label": "ChildAdded"
         },
         {
           "args": [
             {
-              "label": "owner",
+              "docs": [],
+              "indexed": true,
+              "label": "parent",
               "type": {
                 "displayName": [
-                  "psp34_external",
-                  "AllowanceInput1"
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "collection",
+              "type": {
+                "displayName": [
+                  "AccountId"
                 ],
                 "type": 8
               }
             },
             {
-              "label": "operator",
+              "docs": [],
+              "indexed": true,
+              "label": "child",
               "type": {
                 "displayName": [
-                  "psp34_external",
-                  "AllowanceInput2"
+                  "Id"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when a child is accepted."
+          ],
+          "label": "ChildAccepted"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "parent",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "child_collection",
+              "type": {
+                "displayName": [
+                  "AccountId"
                 ],
                 "type": 8
               }
             },
             {
-              "label": "id",
+              "docs": [],
+              "indexed": true,
+              "label": "child_token_id",
               "type": {
                 "displayName": [
-                  "psp34_external",
-                  "AllowanceInput3"
+                  "Id"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when a child is removed."
+          ],
+          "label": "ChildRemoved"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "parent",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "child_collection",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "child_token_id",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when a child is rejected."
+          ],
+          "label": "ChildRejected"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "asset",
+              "type": {
+                "displayName": [
+                  "AssetId"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when new asset is set for the collection."
+          ],
+          "label": "AssetSet"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "token",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "asset",
+              "type": {
+                "displayName": [
+                  "AssetId"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "replaces",
+              "type": {
+                "displayName": [
+                  "Option"
                 ],
                 "type": 14
               }
             }
           ],
           "docs": [
-            " Returns `true` if the operator is approved by the owner to withdraw `id` token.",
-            " If `id` is `None`, returns `true` if the operator is approved to withdraw all owner's tokens."
+            " Event emitted when the asset is added to the token."
           ],
-          "label": "PSP34::allowance",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "psp34_external",
-              "AllowanceOutput"
-            ],
-            "type": 26
-          },
-          "selector": "0x4790f55a"
+          "label": "AssetAddedToToken"
         },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "token",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "asset",
+              "type": {
+                "displayName": [
+                  "AssetId"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when the asset is accepted."
+          ],
+          "label": "AssetAccepted"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "token",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "asset",
+              "type": {
+                "displayName": [
+                  "AssetId"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when the asset is rejected."
+          ],
+          "label": "AssetRejected"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "token",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "asset",
+              "type": {
+                "displayName": [
+                  "AssetId"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when the asset is removed."
+          ],
+          "label": "AssetRemoved"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "token",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "priorities",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 33
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when the asset is removed."
+          ],
+          "label": "AssetPrioritySet"
+        }
+      ],
+      "messages": [
         {
           "args": [
             {
@@ -303,7 +569,7 @@ export const metadata = {
                   "psp34_external",
                   "ApproveInput3"
                 ],
-                "type": 26
+                "type": 38
               }
             }
           ],
@@ -327,45 +593,9 @@ export const metadata = {
               "psp34_external",
               "ApproveOutput"
             ],
-            "type": 27
+            "type": 39
           },
           "selector": "0x1932a8b0"
-        },
-        {
-          "args": [],
-          "docs": [
-            " Returns the collection `Id` of the NFT token.",
-            "",
-            " This can represents the relationship between tokens/contracts/pallets."
-          ],
-          "label": "PSP34::collection_id",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "psp34_external",
-              "CollectionIdOutput"
-            ],
-            "type": 1
-          },
-          "selector": "0xffa27a5f"
-        },
-        {
-          "args": [],
-          "docs": [
-            " Returns current NFT total supply."
-          ],
-          "label": "PSP34::total_supply",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "psp34_external",
-              "TotalSupplyOutput"
-            ],
-            "type": 6
-          },
-          "selector": "0x628413fe"
         },
         {
           "args": [
@@ -421,9 +651,273 @@ export const metadata = {
               "psp34_external",
               "TransferOutput"
             ],
-            "type": 27
+            "type": 39
           },
           "selector": "0x3128d61b"
+        },
+        {
+          "args": [
+            {
+              "label": "id",
+              "type": {
+                "displayName": [
+                  "psp34_external",
+                  "OwnerOfInput1"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [
+            " Returns the owner of the token if any."
+          ],
+          "label": "PSP34::owner_of",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "psp34_external",
+              "OwnerOfOutput"
+            ],
+            "type": 19
+          },
+          "selector": "0x1168624d"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Returns the collection `Id` of the NFT token.",
+            "",
+            " This can represents the relationship between tokens/contracts/pallets."
+          ],
+          "label": "PSP34::collection_id",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "psp34_external",
+              "CollectionIdOutput"
+            ],
+            "type": 1
+          },
+          "selector": "0xffa27a5f"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Returns current NFT total supply."
+          ],
+          "label": "PSP34::total_supply",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "psp34_external",
+              "TotalSupplyOutput"
+            ],
+            "type": 6
+          },
+          "selector": "0x628413fe"
+        },
+        {
+          "args": [
+            {
+              "label": "owner",
+              "type": {
+                "displayName": [
+                  "psp34_external",
+                  "BalanceOfInput1"
+                ],
+                "type": 8
+              }
+            }
+          ],
+          "docs": [
+            " Returns the balance of the owner.",
+            "",
+            " This represents the amount of unique tokens the owner has."
+          ],
+          "label": "PSP34::balance_of",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "psp34_external",
+              "BalanceOfOutput"
+            ],
+            "type": 4
+          },
+          "selector": "0xcde7e55f"
+        },
+        {
+          "args": [
+            {
+              "label": "owner",
+              "type": {
+                "displayName": [
+                  "psp34_external",
+                  "AllowanceInput1"
+                ],
+                "type": 8
+              }
+            },
+            {
+              "label": "operator",
+              "type": {
+                "displayName": [
+                  "psp34_external",
+                  "AllowanceInput2"
+                ],
+                "type": 8
+              }
+            },
+            {
+              "label": "id",
+              "type": {
+                "displayName": [
+                  "psp34_external",
+                  "AllowanceInput3"
+                ],
+                "type": 14
+              }
+            }
+          ],
+          "docs": [
+            " Returns `true` if the operator is approved by the owner to withdraw `id` token.",
+            " If `id` is `None`, returns `true` if the operator is approved to withdraw all owner's tokens."
+          ],
+          "label": "PSP34::allowance",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "psp34_external",
+              "AllowanceOutput"
+            ],
+            "type": 38
+          },
+          "selector": "0x4790f55a"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Leaves the contract without owner. It will not be possible to call",
+            " owner's functions anymore. Can only be called by the current owner.",
+            "",
+            " NOTE: Renouncing ownership will leave the contract without an owner,",
+            " thereby removing any functionality that is only available to the owner.",
+            "",
+            " On success a `OwnershipTransferred` event is emitted.",
+            "",
+            " # Errors",
+            "",
+            " Panics with `CallerIsNotOwner` error if caller is not owner"
+          ],
+          "label": "Ownable::renounce_ownership",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ownable_external",
+              "RenounceOwnershipOutput"
+            ],
+            "type": 41
+          },
+          "selector": "0x5e228753"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Returns the address of the current owner."
+          ],
+          "label": "Ownable::owner",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ownable_external",
+              "OwnerOutput"
+            ],
+            "type": 8
+          },
+          "selector": "0x4fa43c8c"
+        },
+        {
+          "args": [
+            {
+              "label": "new_owner",
+              "type": {
+                "displayName": [
+                  "ownable_external",
+                  "TransferOwnershipInput1"
+                ],
+                "type": 8
+              }
+            }
+          ],
+          "docs": [
+            " Transfers ownership of the contract to a `new_owner`.",
+            " Can only be called by the current owner.",
+            "",
+            " On success a `OwnershipTransferred` event is emitted.",
+            "",
+            " # Errors",
+            "",
+            " Panics with `CallerIsNotOwner` error if caller is not owner.",
+            "",
+            " Panics with `NewOwnerIsZero` error if new owner's address is zero."
+          ],
+          "label": "Ownable::transfer_ownership",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ownable_external",
+              "TransferOwnershipOutput"
+            ],
+            "type": 41
+          },
+          "selector": "0x11f43efd"
+        },
+        {
+          "args": [
+            {
+              "label": "id",
+              "type": {
+                "displayName": [
+                  "psp34metadata_external",
+                  "GetAttributeInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "key",
+              "type": {
+                "displayName": [
+                  "psp34metadata_external",
+                  "GetAttributeInput2"
+                ],
+                "type": 7
+              }
+            }
+          ],
+          "docs": [
+            " Returns the attribute of `id` for the given `key`.",
+            "",
+            " If `id` is a collection id of the token, it returns attributes for collection."
+          ],
+          "label": "PSP34Metadata::get_attribute",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "psp34metadata_external",
+              "GetAttributeOutput"
+            ],
+            "type": 43
+          },
+          "selector": "0xf19d48d1"
         },
         {
           "args": [
@@ -452,7 +946,7 @@ export const metadata = {
               "psp34enumerable_external",
               "TokenByIndexOutput"
             ],
-            "type": 29
+            "type": 44
           },
           "selector": "0xcd0340d0"
         },
@@ -493,160 +987,88 @@ export const metadata = {
               "psp34enumerable_external",
               "OwnersTokenByIndexOutput"
             ],
-            "type": 29
+            "type": 44
           },
           "selector": "0x3bcfb511"
         },
         {
-          "args": [
-            {
-              "label": "id",
-              "type": {
-                "displayName": [
-                  "psp34metadata_external",
-                  "GetAttributeInput1"
-                ],
-                "type": 1
-              }
-            },
-            {
-              "label": "key",
-              "type": {
-                "displayName": [
-                  "psp34metadata_external",
-                  "GetAttributeInput2"
-                ],
-                "type": 7
-              }
-            }
-          ],
+          "args": [],
           "docs": [
-            " Returns the attribute of `id` for the given `key`.",
-            "",
-            " If `id` is a collection id of the token, it returns attributes for collection."
+            " Get token mint price."
           ],
-          "label": "PSP34Metadata::get_attribute",
+          "label": "Utils::price",
           "mutates": false,
           "payable": false,
           "returnType": {
             "displayName": [
-              "psp34metadata_external",
-              "GetAttributeOutput"
-            ],
-            "type": 30
-          },
-          "selector": "0xf19d48d1"
-        },
-        {
-          "args": [],
-          "docs": [
-            " Returns the address of the current owner."
-          ],
-          "label": "Ownable::owner",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "ownable_external",
-              "OwnerOutput"
-            ],
-            "type": 8
-          },
-          "selector": "0x4fa43c8c"
-        },
-        {
-          "args": [],
-          "docs": [
-            " Leaves the contract without owner. It will not be possible to call",
-            " owner's functions anymore. Can only be called by the current owner.",
-            "",
-            " NOTE: Renouncing ownership will leave the contract without an owner,",
-            " thereby removing any functionality that is only available to the owner.",
-            "",
-            " On success a `OwnershipTransferred` event is emitted.",
-            "",
-            " # Errors",
-            "",
-            " Panics with `CallerIsNotOwner` error if caller is not owner"
-          ],
-          "label": "Ownable::renounce_ownership",
-          "mutates": true,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "ownable_external",
-              "RenounceOwnershipOutput"
-            ],
-            "type": 31
-          },
-          "selector": "0x5e228753"
-        },
-        {
-          "args": [
-            {
-              "label": "new_owner",
-              "type": {
-                "displayName": [
-                  "ownable_external",
-                  "TransferOwnershipInput1"
-                ],
-                "type": 8
-              }
-            }
-          ],
-          "docs": [
-            " Transfers ownership of the contract to a `new_owner`.",
-            " Can only be called by the current owner.",
-            "",
-            " On success a `OwnershipTransferred` event is emitted.",
-            "",
-            " # Errors",
-            "",
-            " Panics with `CallerIsNotOwner` error if caller is not owner.",
-            "",
-            " Panics with `NewOwnerIsZero` error if new owner's address is zero."
-          ],
-          "label": "Ownable::transfer_ownership",
-          "mutates": true,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "ownable_external",
-              "TransferOwnershipOutput"
-            ],
-            "type": 31
-          },
-          "selector": "0x11f43efd"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "PayableMint::max_supply",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "payablemint_external",
-              "MaxSupplyOutput"
-            ],
-            "type": 5
-          },
-          "selector": "0x37fc025f"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "PayableMint::price",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "payablemint_external",
+              "utils_external",
               "PriceOutput"
             ],
             "type": 6
           },
-          "selector": "0x259e0123"
+          "selector": "0xc0cfc5b0"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Withdraw contract's balance."
+          ],
+          "label": "Utils::withdraw",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "utils_external",
+              "WithdrawOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0x994b3077"
+        },
+        {
+          "args": [
+            {
+              "label": "token_id",
+              "type": {
+                "displayName": [
+                  "utils_external",
+                  "TokenUriInput1"
+                ],
+                "type": 5
+              }
+            }
+          ],
+          "docs": [
+            " Get URI for the token Id."
+          ],
+          "label": "Utils::token_uri",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "utils_external",
+              "TokenUriOutput"
+            ],
+            "type": 45
+          },
+          "selector": "0x4f3406ca"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Get max supply of tokens."
+          ],
+          "label": "Utils::max_supply",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "utils_external",
+              "MaxSupplyOutput"
+            ],
+            "type": 5
+          },
+          "selector": "0xa630eda5"
         },
         {
           "args": [
@@ -654,40 +1076,27 @@ export const metadata = {
               "label": "uri",
               "type": {
                 "displayName": [
-                  "payablemint_external",
+                  "utils_external",
                   "SetBaseUriInput1"
                 ],
-                "type": 33
+                "type": 46
               }
             }
           ],
-          "docs": [],
-          "label": "PayableMint::set_base_uri",
+          "docs": [
+            " Set new value for the baseUri."
+          ],
+          "label": "Utils::set_base_uri",
           "mutates": true,
           "payable": false,
           "returnType": {
             "displayName": [
-              "payablemint_external",
+              "utils_external",
               "SetBaseUriOutput"
             ],
-            "type": 27
+            "type": 39
           },
-          "selector": "0xa089cf22"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "PayableMint::withdraw",
-          "mutates": true,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "payablemint_external",
-              "WithdrawOutput"
-            ],
-            "type": 27
-          },
-          "selector": "0x0691ffd2"
+          "selector": "0x649f10b7"
         },
         {
           "args": [
@@ -695,8 +1104,8 @@ export const metadata = {
               "label": "to",
               "type": {
                 "displayName": [
-                  "payablemint_external",
-                  "MintForInput1"
+                  "minting_external",
+                  "MintInput1"
                 ],
                 "type": 8
               }
@@ -705,40 +1114,364 @@ export const metadata = {
               "label": "mint_amount",
               "type": {
                 "displayName": [
-                  "payablemint_external",
-                  "MintForInput2"
+                  "minting_external",
+                  "MintInput2"
                 ],
                 "type": 5
               }
             }
           ],
-          "docs": [],
-          "label": "PayableMint::mint_for",
+          "docs": [
+            " Mint one or more tokens."
+          ],
+          "label": "Minting::mint",
           "mutates": true,
           "payable": true,
           "returnType": {
             "displayName": [
-              "payablemint_external",
-              "MintForOutput"
+              "minting_external",
+              "MintOutput"
             ],
-            "type": 27
+            "type": 39
           },
-          "selector": "0x37f12bac"
+          "selector": "0x0f8c5089"
         },
         {
           "args": [],
-          "docs": [],
-          "label": "PayableMint::mint_next",
+          "docs": [
+            " Mint next available token for the caller."
+          ],
+          "label": "Minting::mint_next",
           "mutates": true,
           "payable": true,
           "returnType": {
             "displayName": [
-              "payablemint_external",
+              "minting_external",
               "MintNextOutput"
             ],
-            "type": 27
+            "type": 39
           },
-          "selector": "0x122435bc"
+          "selector": "0xe1ca1a29"
+        },
+        {
+          "args": [
+            {
+              "label": "parent_token_id",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "RemoveChildInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "child_nft",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "RemoveChildInput2"
+                ],
+                "type": 28
+              }
+            }
+          ],
+          "docs": [
+            " Remove a child NFT (from different collection) from token_id in this collection.",
+            " The status of added child is `Pending` if caller is not owner of child NFT",
+            " The status of added child is `Accepted` if caller is is owner of child NFT",
+            "",
+            " # Requirements:",
+            " * The status of the child is `Accepted`",
+            "",
+            " # Arguments:",
+            " * `parent_token_id`: is the tokenId of the parent NFT.",
+            " * `child_nft`: (collection_id, token_id) of the child instance.",
+            "",
+            " # Result:",
+            " Ownership of child NFT will be transferred to parent NFT owner (cross contract call)",
+            " On success emitts `RmrkEvent::ChildRemoved`"
+          ],
+          "label": "Nesting::remove_child",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "nesting_external",
+              "RemoveChildOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0x27e7420e"
+        },
+        {
+          "args": [
+            {
+              "label": "parent_token_id",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "RejectChildInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "child_nft",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "RejectChildInput2"
+                ],
+                "type": 28
+              }
+            }
+          ],
+          "docs": [
+            " Reject a child NFT (from different collection).",
+            "",
+            " # Requirements:",
+            " * The status of the child is `Pending`",
+            "",
+            " # Arguments:",
+            " * `parent_token_id`: is the tokenId of the parent NFT.",
+            " * `child_nft`: (collection_id, token_id) of the child instance.",
+            "",
+            " # Result:",
+            " Child Nft is removed from pending",
+            " On success emitts `RmrkEvent::ChildRejected`"
+          ],
+          "label": "Nesting::reject_child",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "nesting_external",
+              "RejectChildOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xdd308ed4"
+        },
+        {
+          "args": [
+            {
+              "label": "parent_token_id",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "AcceptChildInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "child_nft",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "AcceptChildInput2"
+                ],
+                "type": 28
+              }
+            }
+          ],
+          "docs": [
+            " Accept a child NFT (from different collection) to be owned by parent token.",
+            "",
+            " # Requirements:",
+            " * The status of the child is `Pending`",
+            "",
+            " # Arguments:",
+            " * `parent_token_id`: is the tokenId of the parent NFT.",
+            " * `child_nft`: (collection_id, token_id) of the child instance.",
+            "",
+            " # Result:",
+            " Child Nft is moved from pending to accepted",
+            " On success emitts `RmrkEvent::ChildAccepted`"
+          ],
+          "label": "Nesting::accept_child",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "nesting_external",
+              "AcceptChildOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0x3b3e2643"
+        },
+        {
+          "args": [
+            {
+              "label": "from",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "TransferChildInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "to",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "TransferChildInput2"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "child_nft",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "TransferChildInput3"
+                ],
+                "type": 28
+              }
+            }
+          ],
+          "docs": [
+            " Transfer the child NFT from one parent to another (in this collection).",
+            "",
+            " # Requirements:",
+            " * The status of the child is `Accepted`",
+            "",
+            " # Arguments:",
+            " * `current_parent`: current parent tokenId which holds child nft",
+            " * `new_parent`: new parent tokenId which will hold child nft",
+            " * `child_nft`: (collection_id, token_id) of the child instance.",
+            "",
+            " # Result:",
+            " Ownership of child NFT will be transferred to this contract (cross contract call)",
+            " On success emitts `RmrkEvent::ChildAdded`",
+            " On success emitts `RmrkEvent::ChildAccepted` - only if caller is already owner of child NFT"
+          ],
+          "label": "Nesting::transfer_child",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "nesting_external",
+              "TransferChildOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xdb43324e"
+        },
+        {
+          "args": [
+            {
+              "label": "parent_token_id",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "ChildrenBalanceInput1"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [
+            " Read the number of children on the parent token.",
+            " # Arguments:",
+            " * `parent_token_id`: parent tokenId to check",
+            "",
+            " # Result:",
+            " Returns the tupple of `(accepted_children, pending_children)` count"
+          ],
+          "label": "Nesting::children_balance",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "nesting_external",
+              "ChildrenBalanceOutput"
+            ],
+            "type": 47
+          },
+          "selector": "0x2348106c"
+        },
+        {
+          "args": [
+            {
+              "label": "parent_token_id",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "AddChildInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "child_nft",
+              "type": {
+                "displayName": [
+                  "nesting_external",
+                  "AddChildInput2"
+                ],
+                "type": 28
+              }
+            }
+          ],
+          "docs": [
+            " Add a child NFT (from different collection) to the NFT in this collection.",
+            " The status of the added child is `Pending` if caller is not owner of child NFT",
+            " The status of the added child is `Accepted` if caller is is owner of child NFT",
+            " The caller needs not to be the owner of the to_parent_token_id, but",
+            " Caller must be owner of the child NFT,",
+            " in order to perform transfer() ownership of the child nft to to_parent_token_id.",
+            "",
+            " # Requirements:",
+            " * `child_contract_address` needs to be added by collecion owner",
+            " * `to_parent_token_id` must exist.",
+            " * `child_token_id` must exist.",
+            " * There cannot be two identical children.",
+            "",
+            " # Arguments:",
+            " * `to_parent_token_id`: is the tokenId of the parent NFT. The receiver of child.",
+            " * `child_nft`: (collection_id, token_id) of the child instance.",
+            "",
+            " # Result:",
+            " Ownership of child NFT will be transferred to this contract (cross contract call)",
+            " On success emitts `RmrkEvent::ChildAdded`",
+            " On success emitts `RmrkEvent::ChildAccepted` - only if caller is already owner of child NFT"
+          ],
+          "label": "Nesting::add_child",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "nesting_external",
+              "AddChildOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0x1d6f5156"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Used to retrieve the total number of assets.",
+            " # Returns",
+            "  * u64 The total number of assets"
+          ],
+          "label": "MultiAsset::total_assets",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "TotalAssetsOutput"
+            ],
+            "type": 4
+          },
+          "selector": "0x9b26f6d8"
         },
         {
           "args": [
@@ -746,32 +1479,1045 @@ export const metadata = {
               "label": "token_id",
               "type": {
                 "displayName": [
-                  "payablemint_external",
-                  "TokenUriInput1"
+                  "multiasset_external",
+                  "TotalTokenAssetsInput1"
                 ],
-                "type": 5
+                "type": 1
               }
             }
           ],
-          "docs": [],
-          "label": "PayableMint::token_uri",
+          "docs": [
+            " Used to retrieve the total number of assets per token"
+          ],
+          "label": "MultiAsset::total_token_assets",
           "mutates": false,
           "payable": false,
           "returnType": {
             "displayName": [
-              "payablemint_external",
-              "TokenUriOutput"
+              "multiasset_external",
+              "TotalTokenAssetsOutput"
             ],
-            "type": 34
+            "type": 47
           },
-          "selector": "0xad9d6966"
+          "selector": "0x525922a3"
+        },
+        {
+          "args": [
+            {
+              "label": "token_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "RemoveAssetInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "asset_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "RemoveAssetInput2"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Remove the assets for the list of token assets"
+          ],
+          "label": "MultiAsset::remove_asset",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "RemoveAssetOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xfdbda22c"
+        },
+        {
+          "args": [
+            {
+              "label": "token_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "AcceptAssetInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "asset_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "AcceptAssetInput2"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Accepts an asset at from the pending array of given token.",
+            " Migrates the asset from the token's pending asset array to the token's active asset array.",
+            " Active assets cannot be removed by anyone, but can be replaced by a new asset.",
+            " # Requirements:",
+            "  * The caller must own the token or be approved to manage the token's assets",
+            "  * `tokenId` must exist.",
+            "  * `assetId` must be in the pending_asset list.",
+            " # Arguments",
+            "  * tokenId ID of the token for which to accept the pending asset",
+            "  * assetId ID of the asset expected to be in the pending_asset list.",
+            " Emits an {AssetAccepted} event."
+          ],
+          "label": "MultiAsset::accept_asset",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "AcceptAssetOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xdc2df4e5"
+        },
+        {
+          "args": [
+            {
+              "label": "token_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "RejectAssetInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "asset_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "RejectAssetInput2"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Rejects an asset from the pending array of given token.",
+            " Removes the asset from the token's pending asset array.",
+            " # Requirements:",
+            "  * The caller must own the token or be approved to manage the token's assets",
+            "  * `tokenId` must exist.",
+            "  * `assetId` must be in the pending_asset list.",
+            " # Arguments",
+            "  * tokenId ID of the token for which to accept the pending asset",
+            "  * assetId ID of the asset expected to be in the pending_asset list.",
+            " Emits a {AssetRejected} event."
+          ],
+          "label": "MultiAsset::reject_asset",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "RejectAssetOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xb3e25a89"
+        },
+        {
+          "args": [
+            {
+              "label": "id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "AddAssetEntryInput1"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "equippable_group_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "AddAssetEntryInput2"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "asset_uri",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "AddAssetEntryInput3"
+                ],
+                "type": 7
+              }
+            }
+          ],
+          "docs": [
+            " Used to add a asset entry.",
+            " The ID of the asset is automatically assigned to be the next available asset ID.",
+            " # Arguments",
+            "  * `asset_uri` Uri for the new asset",
+            " Emits an {AssetSet} event."
+          ],
+          "label": "MultiAsset::add_asset_entry",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "AddAssetEntryOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0x5427f3c0"
+        },
+        {
+          "args": [
+            {
+              "label": "token_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "SetPriorityInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "priorities",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "SetPriorityInput2"
+                ],
+                "type": 33
+              }
+            }
+          ],
+          "docs": [
+            " Used to specify the priorities for a given token's active assets.",
+            " If the length of the priorities array doesn't match the length of the active assets array, the execution",
+            "  will be reverted.",
+            " The position of the priority value in the array corresponds the position of the asset in the active",
+            "  assets array it will be applied to.",
+            " # Arguments",
+            "  * tokenId ID of the token for which the priorities are being set",
+            "  * priorities Array of priorities for the assets",
+            " Emits a {AssetPrioritySet} event."
+          ],
+          "label": "MultiAsset::set_priority",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "SetPriorityOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0x1fde0ead"
+        },
+        {
+          "args": [
+            {
+              "label": "token_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "AddAssetToTokenInput1"
+                ],
+                "type": 1
+              }
+            },
+            {
+              "label": "asset_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "AddAssetToTokenInput2"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "replaces_asset_with_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "AddAssetToTokenInput3"
+                ],
+                "type": 14
+              }
+            }
+          ],
+          "docs": [
+            " Used to add an asset to a token.",
+            " If the given asset is already added to the token, the execution will be reverted.",
+            " If the asset ID is invalid, the execution will be reverted.",
+            " If the token already has the maximum amount of pending assets (128), the execution will be",
+            " reverted.",
+            " If the asset is being added by the current root owner of the token, the asset will be automatically",
+            " accepted.",
+            " # Arguments",
+            "  * tokenId ID of the token to add the asset to",
+            "  * assetId ID of the asset to add to the token",
+            "  * replacesAssetWithId ID of the asset to replace from the token's list of active assets",
+            " Emits an {AssetAddedToToken} event."
+          ],
+          "label": "MultiAsset::add_asset_to_token",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "AddAssetToTokenOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xe893e17a"
+        },
+        {
+          "args": [
+            {
+              "label": "token_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "GetAcceptedTokenAssetsInput1"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [
+            " Fetch all accepted assets for the token_id"
+          ],
+          "label": "MultiAsset::get_accepted_token_assets",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "GetAcceptedTokenAssetsOutput"
+            ],
+            "type": 49
+          },
+          "selector": "0x765ef0e3"
+        },
+        {
+          "args": [
+            {
+              "label": "asset_id",
+              "type": {
+                "displayName": [
+                  "multiasset_external",
+                  "GetAssetUriInput1"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Used to retrieve asset's uri"
+          ],
+          "label": "MultiAsset::get_asset_uri",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "multiasset_external",
+              "GetAssetUriOutput"
+            ],
+            "type": 43
+          },
+          "selector": "0xb677b85c"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "label": "Base::get_base_metadata",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "GetBaseMetadataOutput"
+            ],
+            "type": 46
+          },
+          "selector": "0xef4c0817"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Get the list of all parts."
+          ],
+          "label": "Base::get_parts_count",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "GetPartsCountOutput"
+            ],
+            "type": 4
+          },
+          "selector": "0x0ae71607"
+        },
+        {
+          "args": [
+            {
+              "label": "part_id",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "AddEquippableAddressesInput1"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "equippable_address",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "AddEquippableAddressesInput2"
+                ],
+                "type": 37
+              }
+            }
+          ],
+          "docs": [
+            " Add collection address(es) that can be used to equip given `PartId`."
+          ],
+          "label": "Base::add_equippable_addresses",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "AddEquippableAddressesOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0x676b2b0e"
+        },
+        {
+          "args": [
+            {
+              "label": "part_id",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "ResetEquippableAddressesInput1"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Remove list of equippable addresses for given Part"
+          ],
+          "label": "Base::reset_equippable_addresses",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "ResetEquippableAddressesOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xa1771d47"
+        },
+        {
+          "args": [
+            {
+              "label": "part_id",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "SetEquippableByAllInput1"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Sets the is_equippable_by_all flag to true, meaning that any collection may be equipped into the `PartId`"
+          ],
+          "label": "Base::set_equippable_by_all",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "SetEquippableByAllOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xf02dfddf"
+        },
+        {
+          "args": [
+            {
+              "label": "part_id",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "GetPartInput1"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Get the part details for the given PartId."
+          ],
+          "label": "Base::get_part",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "GetPartOutput"
+            ],
+            "type": 51
+          },
+          "selector": "0x4adb5884"
+        },
+        {
+          "args": [
+            {
+              "label": "base_metadata",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "SetupBaseInput1"
+                ],
+                "type": 7
+              }
+            }
+          ],
+          "docs": [],
+          "label": "Base::setup_base",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "SetupBaseOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xcd5b2ca6"
+        },
+        {
+          "args": [
+            {
+              "label": "part_id",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "IsEquippableInput1"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "target_address",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "IsEquippableInput2"
+                ],
+                "type": 8
+              }
+            }
+          ],
+          "docs": [
+            " Check whether the given address is allowed to equip the desired `PartId`."
+          ],
+          "label": "Base::is_equippable",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "IsEquippableOutput"
+            ],
+            "type": 38
+          },
+          "selector": "0x458219ee"
+        },
+        {
+          "args": [
+            {
+              "label": "parts",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "AddPartListInput1"
+                ],
+                "type": 52
+              }
+            }
+          ],
+          "docs": [
+            " Add one or more parts to the base"
+          ],
+          "label": "Base::add_part_list",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "AddPartListOutput"
+            ],
+            "type": 39
+          },
+          "selector": "0xa69bb397"
+        },
+        {
+          "args": [
+            {
+              "label": "part_id",
+              "type": {
+                "displayName": [
+                  "base_external",
+                  "IsEquippableByAllInput1"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [
+            " Checks if the given `PartId` can be equipped by any collection"
+          ],
+          "label": "Base::is_equippable_by_all",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "base_external",
+              "IsEquippableByAllOutput"
+            ],
+            "type": 38
+          },
+          "selector": "0xc51b3205"
         }
       ]
     },
     "storage": {
-      "cell": {
-        "key": "0x0000000000000000000000000000000000000000000000000000000000000000",
-        "ty": 0
+      "struct": {
+        "fields": [
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0x0dbe693b00000000000000000000000000000000000000000000000000000000",
+                        "ty": 0
+                      }
+                    },
+                    "name": "token_owner"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0x0ebe693b00000000000000000000000000000000000000000000000000000000",
+                        "ty": 12
+                      }
+                    },
+                    "name": "operator_approvals"
+                  },
+                  {
+                    "layout": {
+                      "struct": {
+                        "fields": [
+                          {
+                            "layout": {
+                              "cell": {
+                                "key": "0x4cefab1200000000000000000000000000000000000000000000000000000000",
+                                "ty": 18
+                              }
+                            },
+                            "name": "enumerable"
+                          },
+                          {
+                            "layout": {
+                              "enum": {
+                                "dispatchKey": "0x4defab1200000000000000000000000000000000000000000000000000000000",
+                                "variants": {
+                                  "0": {
+                                    "fields": [
+                                      {
+                                        "layout": {
+                                          "cell": {
+                                            "key": "0x4eefab1200000000000000000000000000000000000000000000000000000000",
+                                            "ty": 15
+                                          }
+                                        },
+                                        "name": null
+                                      }
+                                    ]
+                                  },
+                                  "1": {
+                                    "fields": []
+                                  }
+                                }
+                              }
+                            },
+                            "name": "_reserved"
+                          }
+                        ]
+                      }
+                    },
+                    "name": "balances"
+                  },
+                  {
+                    "layout": {
+                      "enum": {
+                        "dispatchKey": "0x0fbe693b00000000000000000000000000000000000000000000000000000000",
+                        "variants": {
+                          "0": {
+                            "fields": [
+                              {
+                                "layout": {
+                                  "cell": {
+                                    "key": "0x10be693b00000000000000000000000000000000000000000000000000000000",
+                                    "ty": 15
+                                  }
+                                },
+                                "name": null
+                              }
+                            ]
+                          },
+                          "1": {
+                            "fields": []
+                          }
+                        }
+                      }
+                    },
+                    "name": "_reserved"
+                  }
+                ]
+              }
+            },
+            "name": "psp34"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xf9c17de900000000000000000000000000000000000000000000000000000000",
+                        "ty": 2
+                      }
+                    },
+                    "name": "status"
+                  },
+                  {
+                    "layout": {
+                      "enum": {
+                        "dispatchKey": "0xfac17de900000000000000000000000000000000000000000000000000000000",
+                        "variants": {
+                          "0": {
+                            "fields": [
+                              {
+                                "layout": {
+                                  "cell": {
+                                    "key": "0xfbc17de900000000000000000000000000000000000000000000000000000000",
+                                    "ty": 15
+                                  }
+                                },
+                                "name": null
+                              }
+                            ]
+                          },
+                          "1": {
+                            "fields": []
+                          }
+                        }
+                      }
+                    },
+                    "name": "_reserved"
+                  }
+                ]
+              }
+            },
+            "name": "guard"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xb36ee29c00000000000000000000000000000000000000000000000000000000",
+                        "ty": 8
+                      }
+                    },
+                    "name": "owner"
+                  },
+                  {
+                    "layout": {
+                      "enum": {
+                        "dispatchKey": "0xb46ee29c00000000000000000000000000000000000000000000000000000000",
+                        "variants": {
+                          "0": {
+                            "fields": [
+                              {
+                                "layout": {
+                                  "cell": {
+                                    "key": "0xb56ee29c00000000000000000000000000000000000000000000000000000000",
+                                    "ty": 15
+                                  }
+                                },
+                                "name": null
+                              }
+                            ]
+                          },
+                          "1": {
+                            "fields": []
+                          }
+                        }
+                      }
+                    },
+                    "name": "_reserved"
+                  }
+                ]
+              }
+            },
+            "name": "ownable"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xc4c906f100000000000000000000000000000000000000000000000000000000",
+                        "ty": 22
+                      }
+                    },
+                    "name": "attributes"
+                  },
+                  {
+                    "layout": {
+                      "enum": {
+                        "dispatchKey": "0xc5c906f100000000000000000000000000000000000000000000000000000000",
+                        "variants": {
+                          "0": {
+                            "fields": [
+                              {
+                                "layout": {
+                                  "cell": {
+                                    "key": "0xc6c906f100000000000000000000000000000000000000000000000000000000",
+                                    "ty": 15
+                                  }
+                                },
+                                "name": null
+                              }
+                            ]
+                          },
+                          "1": {
+                            "fields": []
+                          }
+                        }
+                      }
+                    },
+                    "name": "_reserved"
+                  }
+                ]
+              }
+            },
+            "name": "metadata"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0x5cd983cd00000000000000000000000000000000000000000000000000000000",
+                        "ty": 4
+                      }
+                    },
+                    "name": "collection_id"
+                  }
+                ]
+              }
+            },
+            "name": "utils"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0x6d6dfdb300000000000000000000000000000000000000000000000000000000",
+                        "ty": 26
+                      }
+                    },
+                    "name": "pending_children"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0x6e6dfdb300000000000000000000000000000000000000000000000000000000",
+                        "ty": 26
+                      }
+                    },
+                    "name": "accepted_children"
+                  }
+                ]
+              }
+            },
+            "name": "nesting"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xbdd75dcb00000000000000000000000000000000000000000000000000000000",
+                        "ty": 30
+                      }
+                    },
+                    "name": "collection_asset_entries"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xbed75dcb00000000000000000000000000000000000000000000000000000000",
+                        "ty": 32
+                      }
+                    },
+                    "name": "accepted_assets"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xbfd75dcb00000000000000000000000000000000000000000000000000000000",
+                        "ty": 32
+                      }
+                    },
+                    "name": "pending_assets"
+                  }
+                ]
+              }
+            },
+            "name": "multiasset"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0x125ccf5c00000000000000000000000000000000000000000000000000000000",
+                        "ty": 5
+                      }
+                    },
+                    "name": "last_token_id"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0x135ccf5c00000000000000000000000000000000000000000000000000000000",
+                        "ty": 5
+                      }
+                    },
+                    "name": "max_supply"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0x145ccf5c00000000000000000000000000000000000000000000000000000000",
+                        "ty": 6
+                      }
+                    },
+                    "name": "price_per_mint"
+                  }
+                ]
+              }
+            },
+            "name": "minting"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xe8307ec300000000000000000000000000000000000000000000000000000000",
+                        "ty": 33
+                      }
+                    },
+                    "name": "part_ids"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xe9307ec300000000000000000000000000000000000000000000000000000000",
+                        "ty": 34
+                      }
+                    },
+                    "name": "parts"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xea307ec300000000000000000000000000000000000000000000000000000000",
+                        "ty": 4
+                      }
+                    },
+                    "name": "next_part_id"
+                  },
+                  {
+                    "layout": {
+                      "cell": {
+                        "key": "0xeb307ec300000000000000000000000000000000000000000000000000000000",
+                        "ty": 7
+                      }
+                    },
+                    "name": "base_metadata_uri"
+                  }
+                ]
+              }
+            },
+            "name": "base"
+          }
+        ]
       }
     },
     "types": [
@@ -1238,12 +2984,284 @@ export const metadata = {
         "id": 26,
         "type": {
           "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 29,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 1
+            },
+            {
+              "name": "V",
+              "type": 27
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 27,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 28
+            }
+          }
+        }
+      },
+      {
+        "id": 28,
+        "type": {
+          "def": {
+            "tuple": [
+              8,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "id": 29,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 9,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_primitives",
+            "Key"
+          ]
+        }
+      },
+      {
+        "id": 30,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 31
+            }
+          }
+        }
+      },
+      {
+        "id": 31,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "asset_id",
+                  "type": 4,
+                  "typeName": "AssetId"
+                },
+                {
+                  "name": "equippable_group_id",
+                  "type": 4,
+                  "typeName": "EquippableGroupId"
+                },
+                {
+                  "name": "asset_uri",
+                  "type": 7,
+                  "typeName": "String"
+                }
+              ]
+            }
+          },
+          "path": [
+            "rmrk",
+            "impls",
+            "rmrk",
+            "types",
+            "Asset"
+          ]
+        }
+      },
+      {
+        "id": 32,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 29,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 1
+            },
+            {
+              "name": "V",
+              "type": 33
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 33,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 4
+            }
+          }
+        }
+      },
+      {
+        "id": 34,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 29,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 4
+            },
+            {
+              "name": "V",
+              "type": 35
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 35,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "part_type",
+                  "type": 36,
+                  "typeName": "PartType"
+                },
+                {
+                  "name": "z",
+                  "type": 2,
+                  "typeName": "u8"
+                },
+                {
+                  "name": "equippable",
+                  "type": 37,
+                  "typeName": "Vec<AccountId>"
+                },
+                {
+                  "name": "metadata_uri",
+                  "type": 7,
+                  "typeName": "String"
+                },
+                {
+                  "name": "is_equippable_by_all",
+                  "type": 38,
+                  "typeName": "bool"
+                }
+              ]
+            }
+          },
+          "path": [
+            "rmrk",
+            "impls",
+            "rmrk",
+            "types",
+            "Part"
+          ]
+        }
+      },
+      {
+        "id": 36,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "index": 1,
+                  "name": "Slot"
+                },
+                {
+                  "index": 2,
+                  "name": "Fixed"
+                }
+              ]
+            }
+          },
+          "path": [
+            "rmrk",
+            "impls",
+            "rmrk",
+            "types",
+            "PartType"
+          ]
+        }
+      },
+      {
+        "id": 37,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 8
+            }
+          }
+        }
+      },
+      {
+        "id": 38,
+        "type": {
+          "def": {
             "primitive": "bool"
           }
         }
       },
       {
-        "id": 27,
+        "id": 39,
         "type": {
           "def": {
             "variant": {
@@ -1260,7 +3278,7 @@ export const metadata = {
                 {
                   "fields": [
                     {
-                      "type": 28
+                      "type": 40
                     }
                   ],
                   "index": 1,
@@ -1276,7 +3294,7 @@ export const metadata = {
             },
             {
               "name": "E",
-              "type": 28
+              "type": 40
             }
           ],
           "path": [
@@ -1285,7 +3303,7 @@ export const metadata = {
         }
       },
       {
-        "id": 28,
+        "id": 40,
         "type": {
           "def": {
             "variant": {
@@ -1339,7 +3357,7 @@ export const metadata = {
         }
       },
       {
-        "id": 29,
+        "id": 41,
         "type": {
           "def": {
             "variant": {
@@ -1347,7 +3365,7 @@ export const metadata = {
                 {
                   "fields": [
                     {
-                      "type": 1
+                      "type": 15
                     }
                   ],
                   "index": 0,
@@ -1356,7 +3374,7 @@ export const metadata = {
                 {
                   "fields": [
                     {
-                      "type": 28
+                      "type": 42
                     }
                   ],
                   "index": 1,
@@ -1368,11 +3386,11 @@ export const metadata = {
           "params": [
             {
               "name": "T",
-              "type": 1
+              "type": 15
             },
             {
               "name": "E",
-              "type": 28
+              "type": 42
             }
           ],
           "path": [
@@ -1381,7 +3399,33 @@ export const metadata = {
         }
       },
       {
-        "id": 30,
+        "id": 42,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "CallerIsNotOwner"
+                },
+                {
+                  "index": 1,
+                  "name": "NewOwnerIsZero"
+                }
+              ]
+            }
+          },
+          "path": [
+            "openbrush_contracts",
+            "traits",
+            "errors",
+            "ownable",
+            "OwnableError"
+          ]
+        }
+      },
+      {
+        "id": 43,
         "type": {
           "def": {
             "variant": {
@@ -1414,7 +3458,7 @@ export const metadata = {
         }
       },
       {
-        "id": 31,
+        "id": 44,
         "type": {
           "def": {
             "variant": {
@@ -1422,7 +3466,7 @@ export const metadata = {
                 {
                   "fields": [
                     {
-                      "type": 15
+                      "type": 1
                     }
                   ],
                   "index": 0,
@@ -1431,7 +3475,7 @@ export const metadata = {
                 {
                   "fields": [
                     {
-                      "type": 32
+                      "type": 40
                     }
                   ],
                   "index": 1,
@@ -1443,11 +3487,11 @@ export const metadata = {
           "params": [
             {
               "name": "T",
-              "type": 15
+              "type": 1
             },
             {
               "name": "E",
-              "type": 32
+              "type": 40
             }
           ],
           "path": [
@@ -1456,41 +3500,7 @@ export const metadata = {
         }
       },
       {
-        "id": 32,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "CallerIsNotOwner"
-                },
-                {
-                  "index": 1,
-                  "name": "NewOwnerIsZero"
-                }
-              ]
-            }
-          },
-          "path": [
-            "openbrush_contracts",
-            "traits",
-            "errors",
-            "ownable",
-            "OwnableError"
-          ]
-        }
-      },
-      {
-        "id": 33,
-        "type": {
-          "def": {
-            "primitive": "str"
-          }
-        }
-      },
-      {
-        "id": 34,
+        "id": 45,
         "type": {
           "def": {
             "variant": {
@@ -1498,7 +3508,7 @@ export const metadata = {
                 {
                   "fields": [
                     {
-                      "type": 33
+                      "type": 46
                     }
                   ],
                   "index": 0,
@@ -1507,11 +3517,151 @@ export const metadata = {
                 {
                   "fields": [
                     {
-                      "type": 28
+                      "type": 40
                     }
                   ],
                   "index": 1,
                   "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 46
+            },
+            {
+              "name": "E",
+              "type": 40
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 46,
+        "type": {
+          "def": {
+            "primitive": "str"
+          }
+        }
+      },
+      {
+        "id": 47,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 48
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 40
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 48
+            },
+            {
+              "name": "E",
+              "type": 40
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 48,
+        "type": {
+          "def": {
+            "tuple": [
+              5,
+              5
+            ]
+          }
+        }
+      },
+      {
+        "id": 49,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 50
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 40
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 50
+            },
+            {
+              "name": "E",
+              "type": 40
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 50,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 33
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
                 }
               ]
             }
@@ -1520,15 +3670,54 @@ export const metadata = {
             {
               "name": "T",
               "type": 33
-            },
-            {
-              "name": "E",
-              "type": 28
             }
           ],
           "path": [
-            "Result"
+            "Option"
           ]
+        }
+      },
+      {
+        "id": 51,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 35
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 35
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 52,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 35
+            }
+          }
         }
       }
     ]
@@ -1549,7 +3738,7 @@ export function decodeConstructor(hex: string): Constructor {
     return _abi.decodeConstructor(hex)
 }
 
-export type Event = Event_Transfer | Event_Approval
+export type Event = Event_Transfer | Event_Approval | Event_ChildAdded | Event_ChildAccepted | Event_ChildRemoved | Event_ChildRejected | Event_AssetSet | Event_AssetAddedToToken | Event_AssetAccepted | Event_AssetRejected | Event_AssetRemoved | Event_AssetPrioritySet
 
 export interface Event_Transfer {
     __kind: 'Transfer'
@@ -1566,36 +3755,71 @@ export interface Event_Approval {
     approved: boolean
 }
 
-export type Message = Message_PSP34_balance_of | Message_PSP34_owner_of | Message_PSP34_allowance | Message_PSP34_approve | Message_PSP34_collection_id | Message_PSP34_total_supply | Message_PSP34_transfer | Message_PSP34Enumerable_token_by_index | Message_PSP34Enumerable_owners_token_by_index | Message_PSP34Metadata_get_attribute | Message_Ownable_owner | Message_Ownable_renounce_ownership | Message_Ownable_transfer_ownership | Message_PayableMint_max_supply | Message_PayableMint_price | Message_PayableMint_set_base_uri | Message_PayableMint_withdraw | Message_PayableMint_mint_for | Message_PayableMint_mint_next | Message_PayableMint_token_uri
-
-/**
- *  Returns the balance of the owner.
- * 
- *  This represents the amount of unique tokens the owner has.
- */
-export interface Message_PSP34_balance_of {
-    __kind: 'PSP34_balance_of'
-    owner: Uint8Array
+export interface Event_ChildAdded {
+    __kind: 'ChildAdded'
+    to: Id
+    collection: Uint8Array
+    child: Id
 }
 
-/**
- *  Returns the owner of the token if any.
- */
-export interface Message_PSP34_owner_of {
-    __kind: 'PSP34_owner_of'
-    id: Id
+export interface Event_ChildAccepted {
+    __kind: 'ChildAccepted'
+    parent: Id
+    collection: Uint8Array
+    child: Id
 }
 
-/**
- *  Returns `true` if the operator is approved by the owner to withdraw `id` token.
- *  If `id` is `None`, returns `true` if the operator is approved to withdraw all owner's tokens.
- */
-export interface Message_PSP34_allowance {
-    __kind: 'PSP34_allowance'
-    owner: Uint8Array
-    operator: Uint8Array
-    id: (Id | undefined)
+export interface Event_ChildRemoved {
+    __kind: 'ChildRemoved'
+    parent: Id
+    childCollection: Uint8Array
+    childTokenId: Id
 }
+
+export interface Event_ChildRejected {
+    __kind: 'ChildRejected'
+    parent: Id
+    childCollection: Uint8Array
+    childTokenId: Id
+}
+
+export interface Event_AssetSet {
+    __kind: 'AssetSet'
+    asset: number
+}
+
+export interface Event_AssetAddedToToken {
+    __kind: 'AssetAddedToToken'
+    token: Id
+    asset: number
+    replaces: (Id | undefined)
+}
+
+export interface Event_AssetAccepted {
+    __kind: 'AssetAccepted'
+    token: Id
+    asset: number
+}
+
+export interface Event_AssetRejected {
+    __kind: 'AssetRejected'
+    token: Id
+    asset: number
+}
+
+export interface Event_AssetRemoved {
+    __kind: 'AssetRemoved'
+    token: Id
+    asset: number
+}
+
+export interface Event_AssetPrioritySet {
+    __kind: 'AssetPrioritySet'
+    token: Id
+    priorities: number[]
+}
+
+export type Message = Message_PSP34_approve | Message_PSP34_transfer | Message_PSP34_owner_of | Message_PSP34_collection_id | Message_PSP34_total_supply | Message_PSP34_balance_of | Message_PSP34_allowance | Message_Ownable_renounce_ownership | Message_Ownable_owner | Message_Ownable_transfer_ownership | Message_PSP34Metadata_get_attribute | Message_PSP34Enumerable_token_by_index | Message_PSP34Enumerable_owners_token_by_index | Message_Utils_price | Message_Utils_withdraw | Message_Utils_token_uri | Message_Utils_max_supply | Message_Utils_set_base_uri | Message_Minting_mint | Message_Minting_mint_next | Message_Nesting_remove_child | Message_Nesting_reject_child | Message_Nesting_accept_child | Message_Nesting_transfer_child | Message_Nesting_children_balance | Message_Nesting_add_child | Message_MultiAsset_total_assets | Message_MultiAsset_total_token_assets | Message_MultiAsset_remove_asset | Message_MultiAsset_accept_asset | Message_MultiAsset_reject_asset | Message_MultiAsset_add_asset_entry | Message_MultiAsset_set_priority | Message_MultiAsset_add_asset_to_token | Message_MultiAsset_get_accepted_token_assets | Message_MultiAsset_get_asset_uri | Message_Base_get_base_metadata | Message_Base_get_parts_count | Message_Base_add_equippable_addresses | Message_Base_reset_equippable_addresses | Message_Base_set_equippable_by_all | Message_Base_get_part | Message_Base_setup_base | Message_Base_is_equippable | Message_Base_add_part_list | Message_Base_is_equippable_by_all
 
 /**
  *  Approves `operator` to withdraw the `id` token from the caller's account.
@@ -1617,22 +3841,6 @@ export interface Message_PSP34_approve {
 }
 
 /**
- *  Returns the collection `Id` of the NFT token.
- * 
- *  This can represents the relationship between tokens/contracts/pallets.
- */
-export interface Message_PSP34_collection_id {
-    __kind: 'PSP34_collection_id'
-}
-
-/**
- *  Returns current NFT total supply.
- */
-export interface Message_PSP34_total_supply {
-    __kind: 'PSP34_total_supply'
-}
-
-/**
  *  Transfer approved or owned token from caller.
  * 
  *  On success a `Transfer` event is emitted.
@@ -1650,6 +3858,103 @@ export interface Message_PSP34_transfer {
     to: Uint8Array
     id: Id
     data: Uint8Array
+}
+
+/**
+ *  Returns the owner of the token if any.
+ */
+export interface Message_PSP34_owner_of {
+    __kind: 'PSP34_owner_of'
+    id: Id
+}
+
+/**
+ *  Returns the collection `Id` of the NFT token.
+ * 
+ *  This can represents the relationship between tokens/contracts/pallets.
+ */
+export interface Message_PSP34_collection_id {
+    __kind: 'PSP34_collection_id'
+}
+
+/**
+ *  Returns current NFT total supply.
+ */
+export interface Message_PSP34_total_supply {
+    __kind: 'PSP34_total_supply'
+}
+
+/**
+ *  Returns the balance of the owner.
+ * 
+ *  This represents the amount of unique tokens the owner has.
+ */
+export interface Message_PSP34_balance_of {
+    __kind: 'PSP34_balance_of'
+    owner: Uint8Array
+}
+
+/**
+ *  Returns `true` if the operator is approved by the owner to withdraw `id` token.
+ *  If `id` is `None`, returns `true` if the operator is approved to withdraw all owner's tokens.
+ */
+export interface Message_PSP34_allowance {
+    __kind: 'PSP34_allowance'
+    owner: Uint8Array
+    operator: Uint8Array
+    id: (Id | undefined)
+}
+
+/**
+ *  Leaves the contract without owner. It will not be possible to call
+ *  owner's functions anymore. Can only be called by the current owner.
+ * 
+ *  NOTE: Renouncing ownership will leave the contract without an owner,
+ *  thereby removing any functionality that is only available to the owner.
+ * 
+ *  On success a `OwnershipTransferred` event is emitted.
+ * 
+ *  # Errors
+ * 
+ *  Panics with `CallerIsNotOwner` error if caller is not owner
+ */
+export interface Message_Ownable_renounce_ownership {
+    __kind: 'Ownable_renounce_ownership'
+}
+
+/**
+ *  Returns the address of the current owner.
+ */
+export interface Message_Ownable_owner {
+    __kind: 'Ownable_owner'
+}
+
+/**
+ *  Transfers ownership of the contract to a `new_owner`.
+ *  Can only be called by the current owner.
+ * 
+ *  On success a `OwnershipTransferred` event is emitted.
+ * 
+ *  # Errors
+ * 
+ *  Panics with `CallerIsNotOwner` error if caller is not owner.
+ * 
+ *  Panics with `NewOwnerIsZero` error if new owner's address is zero.
+ */
+export interface Message_Ownable_transfer_ownership {
+    __kind: 'Ownable_transfer_ownership'
+    newOwner: Uint8Array
+}
+
+/**
+ *  Returns the attribute of `id` for the given `key`.
+ * 
+ *  If `id` is a collection id of the token, it returns attributes for collection.
+ */
+export interface Message_PSP34Metadata_get_attribute {
+    __kind: 'PSP34Metadata_get_attribute'
+    id: Id
+    key: Uint8Array
 }
 
 /**
@@ -1676,91 +3981,395 @@ export interface Message_PSP34Enumerable_owners_token_by_index {
 }
 
 /**
- *  Returns the attribute of `id` for the given `key`.
- * 
- *  If `id` is a collection id of the token, it returns attributes for collection.
+ *  Get token mint price.
  */
-export interface Message_PSP34Metadata_get_attribute {
-    __kind: 'PSP34Metadata_get_attribute'
-    id: Id
-    key: Uint8Array
+export interface Message_Utils_price {
+    __kind: 'Utils_price'
 }
 
 /**
- *  Returns the address of the current owner.
+ *  Withdraw contract's balance.
  */
-export interface Message_Ownable_owner {
-    __kind: 'Ownable_owner'
+export interface Message_Utils_withdraw {
+    __kind: 'Utils_withdraw'
 }
 
 /**
- *  Leaves the contract without owner. It will not be possible to call
- *  owner's functions anymore. Can only be called by the current owner.
- * 
- *  NOTE: Renouncing ownership will leave the contract without an owner,
- *  thereby removing any functionality that is only available to the owner.
- * 
- *  On success a `OwnershipTransferred` event is emitted.
- * 
- *  # Errors
- * 
- *  Panics with `CallerIsNotOwner` error if caller is not owner
+ *  Get URI for the token Id.
  */
-export interface Message_Ownable_renounce_ownership {
-    __kind: 'Ownable_renounce_ownership'
+export interface Message_Utils_token_uri {
+    __kind: 'Utils_token_uri'
+    tokenId: bigint
 }
 
 /**
- *  Transfers ownership of the contract to a `new_owner`.
- *  Can only be called by the current owner.
- * 
- *  On success a `OwnershipTransferred` event is emitted.
- * 
- *  # Errors
- * 
- *  Panics with `CallerIsNotOwner` error if caller is not owner.
- * 
- *  Panics with `NewOwnerIsZero` error if new owner's address is zero.
+ *  Get max supply of tokens.
  */
-export interface Message_Ownable_transfer_ownership {
-    __kind: 'Ownable_transfer_ownership'
-    newOwner: Uint8Array
+export interface Message_Utils_max_supply {
+    __kind: 'Utils_max_supply'
 }
 
-export interface Message_PayableMint_max_supply {
-    __kind: 'PayableMint_max_supply'
-}
-
-export interface Message_PayableMint_price {
-    __kind: 'PayableMint_price'
-}
-
-export interface Message_PayableMint_set_base_uri {
-    __kind: 'PayableMint_set_base_uri'
+/**
+ *  Set new value for the baseUri.
+ */
+export interface Message_Utils_set_base_uri {
+    __kind: 'Utils_set_base_uri'
     uri: SetBaseUriInput1
 }
 
-export interface Message_PayableMint_withdraw {
-    __kind: 'PayableMint_withdraw'
-}
-
-export interface Message_PayableMint_mint_for {
-    __kind: 'PayableMint_mint_for'
+/**
+ *  Mint one or more tokens.
+ */
+export interface Message_Minting_mint {
+    __kind: 'Minting_mint'
     to: Uint8Array
     mintAmount: bigint
 }
 
-export interface Message_PayableMint_mint_next {
-    __kind: 'PayableMint_mint_next'
+/**
+ *  Mint next available token for the caller.
+ */
+export interface Message_Minting_mint_next {
+    __kind: 'Minting_mint_next'
 }
 
-export interface Message_PayableMint_token_uri {
-    __kind: 'PayableMint_token_uri'
-    tokenId: bigint
+/**
+ *  Remove a child NFT (from different collection) from token_id in this collection.
+ *  The status of added child is `Pending` if caller is not owner of child NFT
+ *  The status of added child is `Accepted` if caller is is owner of child NFT
+ * 
+ *  # Requirements:
+ *  * The status of the child is `Accepted`
+ * 
+ *  # Arguments:
+ *  * `parent_token_id`: is the tokenId of the parent NFT.
+ *  * `child_nft`: (collection_id, token_id) of the child instance.
+ * 
+ *  # Result:
+ *  Ownership of child NFT will be transferred to parent NFT owner (cross contract call)
+ *  On success emitts `RmrkEvent::ChildRemoved`
+ */
+export interface Message_Nesting_remove_child {
+    __kind: 'Nesting_remove_child'
+    parentTokenId: Id
+    childNft: [Uint8Array, Id]
+}
+
+/**
+ *  Reject a child NFT (from different collection).
+ * 
+ *  # Requirements:
+ *  * The status of the child is `Pending`
+ * 
+ *  # Arguments:
+ *  * `parent_token_id`: is the tokenId of the parent NFT.
+ *  * `child_nft`: (collection_id, token_id) of the child instance.
+ * 
+ *  # Result:
+ *  Child Nft is removed from pending
+ *  On success emitts `RmrkEvent::ChildRejected`
+ */
+export interface Message_Nesting_reject_child {
+    __kind: 'Nesting_reject_child'
+    parentTokenId: Id
+    childNft: [Uint8Array, Id]
+}
+
+/**
+ *  Accept a child NFT (from different collection) to be owned by parent token.
+ * 
+ *  # Requirements:
+ *  * The status of the child is `Pending`
+ * 
+ *  # Arguments:
+ *  * `parent_token_id`: is the tokenId of the parent NFT.
+ *  * `child_nft`: (collection_id, token_id) of the child instance.
+ * 
+ *  # Result:
+ *  Child Nft is moved from pending to accepted
+ *  On success emitts `RmrkEvent::ChildAccepted`
+ */
+export interface Message_Nesting_accept_child {
+    __kind: 'Nesting_accept_child'
+    parentTokenId: Id
+    childNft: [Uint8Array, Id]
+}
+
+/**
+ *  Transfer the child NFT from one parent to another (in this collection).
+ * 
+ *  # Requirements:
+ *  * The status of the child is `Accepted`
+ * 
+ *  # Arguments:
+ *  * `current_parent`: current parent tokenId which holds child nft
+ *  * `new_parent`: new parent tokenId which will hold child nft
+ *  * `child_nft`: (collection_id, token_id) of the child instance.
+ * 
+ *  # Result:
+ *  Ownership of child NFT will be transferred to this contract (cross contract call)
+ *  On success emitts `RmrkEvent::ChildAdded`
+ *  On success emitts `RmrkEvent::ChildAccepted` - only if caller is already owner of child NFT
+ */
+export interface Message_Nesting_transfer_child {
+    __kind: 'Nesting_transfer_child'
+    from: Id
+    to: Id
+    childNft: [Uint8Array, Id]
+}
+
+/**
+ *  Read the number of children on the parent token.
+ *  # Arguments:
+ *  * `parent_token_id`: parent tokenId to check
+ * 
+ *  # Result:
+ *  Returns the tupple of `(accepted_children, pending_children)` count
+ */
+export interface Message_Nesting_children_balance {
+    __kind: 'Nesting_children_balance'
+    parentTokenId: Id
+}
+
+/**
+ *  Add a child NFT (from different collection) to the NFT in this collection.
+ *  The status of the added child is `Pending` if caller is not owner of child NFT
+ *  The status of the added child is `Accepted` if caller is is owner of child NFT
+ *  The caller needs not to be the owner of the to_parent_token_id, but
+ *  Caller must be owner of the child NFT,
+ *  in order to perform transfer() ownership of the child nft to to_parent_token_id.
+ * 
+ *  # Requirements:
+ *  * `child_contract_address` needs to be added by collecion owner
+ *  * `to_parent_token_id` must exist.
+ *  * `child_token_id` must exist.
+ *  * There cannot be two identical children.
+ * 
+ *  # Arguments:
+ *  * `to_parent_token_id`: is the tokenId of the parent NFT. The receiver of child.
+ *  * `child_nft`: (collection_id, token_id) of the child instance.
+ * 
+ *  # Result:
+ *  Ownership of child NFT will be transferred to this contract (cross contract call)
+ *  On success emitts `RmrkEvent::ChildAdded`
+ *  On success emitts `RmrkEvent::ChildAccepted` - only if caller is already owner of child NFT
+ */
+export interface Message_Nesting_add_child {
+    __kind: 'Nesting_add_child'
+    parentTokenId: Id
+    childNft: [Uint8Array, Id]
+}
+
+/**
+ *  Used to retrieve the total number of assets.
+ *  # Returns
+ *   * u64 The total number of assets
+ */
+export interface Message_MultiAsset_total_assets {
+    __kind: 'MultiAsset_total_assets'
+}
+
+/**
+ *  Used to retrieve the total number of assets per token
+ */
+export interface Message_MultiAsset_total_token_assets {
+    __kind: 'MultiAsset_total_token_assets'
+    tokenId: Id
+}
+
+/**
+ *  Remove the assets for the list of token assets
+ */
+export interface Message_MultiAsset_remove_asset {
+    __kind: 'MultiAsset_remove_asset'
+    tokenId: Id
+    assetId: number
+}
+
+/**
+ *  Accepts an asset at from the pending array of given token.
+ *  Migrates the asset from the token's pending asset array to the token's active asset array.
+ *  Active assets cannot be removed by anyone, but can be replaced by a new asset.
+ *  # Requirements:
+ *   * The caller must own the token or be approved to manage the token's assets
+ *   * `tokenId` must exist.
+ *   * `assetId` must be in the pending_asset list.
+ *  # Arguments
+ *   * tokenId ID of the token for which to accept the pending asset
+ *   * assetId ID of the asset expected to be in the pending_asset list.
+ *  Emits an {AssetAccepted} event.
+ */
+export interface Message_MultiAsset_accept_asset {
+    __kind: 'MultiAsset_accept_asset'
+    tokenId: Id
+    assetId: number
+}
+
+/**
+ *  Rejects an asset from the pending array of given token.
+ *  Removes the asset from the token's pending asset array.
+ *  # Requirements:
+ *   * The caller must own the token or be approved to manage the token's assets
+ *   * `tokenId` must exist.
+ *   * `assetId` must be in the pending_asset list.
+ *  # Arguments
+ *   * tokenId ID of the token for which to accept the pending asset
+ *   * assetId ID of the asset expected to be in the pending_asset list.
+ *  Emits a {AssetRejected} event.
+ */
+export interface Message_MultiAsset_reject_asset {
+    __kind: 'MultiAsset_reject_asset'
+    tokenId: Id
+    assetId: number
+}
+
+/**
+ *  Used to add a asset entry.
+ *  The ID of the asset is automatically assigned to be the next available asset ID.
+ *  # Arguments
+ *   * `asset_uri` Uri for the new asset
+ *  Emits an {AssetSet} event.
+ */
+export interface Message_MultiAsset_add_asset_entry {
+    __kind: 'MultiAsset_add_asset_entry'
+    id: number
+    equippableGroupId: number
+    assetUri: Uint8Array
+}
+
+/**
+ *  Used to specify the priorities for a given token's active assets.
+ *  If the length of the priorities array doesn't match the length of the active assets array, the execution
+ *   will be reverted.
+ *  The position of the priority value in the array corresponds the position of the asset in the active
+ *   assets array it will be applied to.
+ *  # Arguments
+ *   * tokenId ID of the token for which the priorities are being set
+ *   * priorities Array of priorities for the assets
+ *  Emits a {AssetPrioritySet} event.
+ */
+export interface Message_MultiAsset_set_priority {
+    __kind: 'MultiAsset_set_priority'
+    tokenId: Id
+    priorities: number[]
+}
+
+/**
+ *  Used to add an asset to a token.
+ *  If the given asset is already added to the token, the execution will be reverted.
+ *  If the asset ID is invalid, the execution will be reverted.
+ *  If the token already has the maximum amount of pending assets (128), the execution will be
+ *  reverted.
+ *  If the asset is being added by the current root owner of the token, the asset will be automatically
+ *  accepted.
+ *  # Arguments
+ *   * tokenId ID of the token to add the asset to
+ *   * assetId ID of the asset to add to the token
+ *   * replacesAssetWithId ID of the asset to replace from the token's list of active assets
+ *  Emits an {AssetAddedToToken} event.
+ */
+export interface Message_MultiAsset_add_asset_to_token {
+    __kind: 'MultiAsset_add_asset_to_token'
+    tokenId: Id
+    assetId: number
+    replacesAssetWithId: (Id | undefined)
+}
+
+/**
+ *  Fetch all accepted assets for the token_id
+ */
+export interface Message_MultiAsset_get_accepted_token_assets {
+    __kind: 'MultiAsset_get_accepted_token_assets'
+    tokenId: Id
+}
+
+/**
+ *  Used to retrieve asset's uri
+ */
+export interface Message_MultiAsset_get_asset_uri {
+    __kind: 'MultiAsset_get_asset_uri'
+    assetId: number
+}
+
+export interface Message_Base_get_base_metadata {
+    __kind: 'Base_get_base_metadata'
+}
+
+/**
+ *  Get the list of all parts.
+ */
+export interface Message_Base_get_parts_count {
+    __kind: 'Base_get_parts_count'
+}
+
+/**
+ *  Add collection address(es) that can be used to equip given `PartId`.
+ */
+export interface Message_Base_add_equippable_addresses {
+    __kind: 'Base_add_equippable_addresses'
+    partId: number
+    equippableAddress: AddEquippableAddressesInput2
+}
+
+/**
+ *  Remove list of equippable addresses for given Part
+ */
+export interface Message_Base_reset_equippable_addresses {
+    __kind: 'Base_reset_equippable_addresses'
+    partId: number
+}
+
+/**
+ *  Sets the is_equippable_by_all flag to true, meaning that any collection may be equipped into the `PartId`
+ */
+export interface Message_Base_set_equippable_by_all {
+    __kind: 'Base_set_equippable_by_all'
+    partId: number
+}
+
+/**
+ *  Get the part details for the given PartId.
+ */
+export interface Message_Base_get_part {
+    __kind: 'Base_get_part'
+    partId: number
+}
+
+export interface Message_Base_setup_base {
+    __kind: 'Base_setup_base'
+    baseMetadata: Uint8Array
+}
+
+/**
+ *  Check whether the given address is allowed to equip the desired `PartId`.
+ */
+export interface Message_Base_is_equippable {
+    __kind: 'Base_is_equippable'
+    partId: number
+    targetAddress: Uint8Array
+}
+
+/**
+ *  Add one or more parts to the base
+ */
+export interface Message_Base_add_part_list {
+    __kind: 'Base_add_part_list'
+    parts: AddPartListInput1
+}
+
+/**
+ *  Checks if the given `PartId` can be equipped by any collection
+ */
+export interface Message_Base_is_equippable_by_all {
+    __kind: 'Base_is_equippable_by_all'
+    partId: number
 }
 
 export type Constructor = Constructor_new
 
+/**
+ * Instantiate new RMRK contract
+ */
 export interface Constructor_new {
     __kind: 'new'
     name: Uint8Array
@@ -1768,13 +4377,16 @@ export interface Constructor_new {
     baseUri: Uint8Array
     maxSupply: bigint
     pricePerMint: bigint
+    collectionMetadata: Uint8Array
+    royaltyReceiver: Uint8Array
+    royalty: u8
 }
 
 export type Id = Id_U8 | Id_U16 | Id_U32 | Id_U64 | Id_U128 | Id_Bytes
 
 export interface Id_U8 {
     __kind: 'U8'
-    value: number
+    value: u8
 }
 
 export interface Id_U16 {
@@ -1803,5 +4415,33 @@ export interface Id_Bytes {
 }
 
 export type SetBaseUriInput1 = string
+
+export type AddEquippableAddressesInput2 = Uint8Array[]
+
+export interface Part {
+    partType: PartType
+    z: u8
+    equippable: AddEquippableAddressesInput2
+    metadataUri: Uint8Array
+    isEquippableByAll: boolean
+}
+
+export type AddPartListInput1 = Part[]
+
+export type u8 = number
+
+export type PartType = PartType_None | PartType_Slot | PartType_Fixed
+
+export interface PartType_None {
+    __kind: 'None'
+}
+
+export interface PartType_Slot {
+    __kind: 'Slot'
+}
+
+export interface PartType_Fixed {
+    __kind: 'Fixed'
+}
 
 export type Result<T, E> = {__kind: 'Ok', value: T} | {__kind: 'Err', value: E}
