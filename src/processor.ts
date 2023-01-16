@@ -2,15 +2,15 @@ import { lookupArchive } from '@subsquid/archive-registry'
 import { SubstrateBatchProcessor } from '@subsquid/substrate-processor'
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import 'dotenv/config'
-import { CONTRACT_ADDRESS, STARTING_BLOCK } from './constants'
+import {  STARTING_BLOCK, RMRK_CONTRACT_ADDRESS } from './constants'
 
-import { handleTokenTransfer } from './mappings/psp34/transfer'
+import { mainFrame } from './mappings'
 
 const database = new Database()
 const processor = new SubstrateBatchProcessor()
 
 processor.setBlockRange({ from: STARTING_BLOCK })
-processor.addContractsContractEmitted(CONTRACT_ADDRESS, {
+processor.addContractsContractEmitted(RMRK_CONTRACT_ADDRESS, {
   data: {
     event: { args: true },
   },
@@ -22,7 +22,7 @@ processor.setDataSource({
   archive,
 })
 
-processor.run(database, handleTokenTransfer)
+processor.run(database, mainFrame)
 
 // processor.run(new TypeormDatabase(), async ctx => {
 //     const txs = extractTransferRecords(ctx)
