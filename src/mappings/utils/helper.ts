@@ -1,5 +1,6 @@
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
+import { Id } from '../../abi/psp34'
 import { SomethingWithOptionalMeta } from './types'
 
 export function isEmpty(obj: Record<string, unknown>): boolean {
@@ -38,4 +39,14 @@ export function oneOf<T>(one: T, two: T): T {
 
 export function toPercent(value: number): number {
   return value / 100
+}
+
+
+export function idOf(id: Id): string {
+  switch (id.__kind) {
+    case 'Bytes':
+      return addressOf(id.value)
+    default: 
+    return id.value.toString()
+  }
 }
