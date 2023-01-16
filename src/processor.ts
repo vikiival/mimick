@@ -1,8 +1,7 @@
-import { lookupArchive } from '@subsquid/archive-registry'
 import { SubstrateBatchProcessor } from '@subsquid/substrate-processor'
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import 'dotenv/config'
-import {  STARTING_BLOCK, RMRK_CONTRACT_ADDRESS } from './constants'
+import {  STARTING_BLOCK, CONTRACT_ADDRESS, archive } from './constants'
 
 import { mainFrame } from './mappings'
 
@@ -10,13 +9,12 @@ const database = new Database()
 const processor = new SubstrateBatchProcessor()
 
 processor.setBlockRange({ from: STARTING_BLOCK })
-processor.addContractsContractEmitted(RMRK_CONTRACT_ADDRESS, {
+processor.addContractsContractEmitted(CONTRACT_ADDRESS, {
   data: {
     event: { args: true },
   },
 } as const)
 
-const archive = lookupArchive('shibuya', { release: 'FireSquid' })
 
 processor.setDataSource({
   archive,
