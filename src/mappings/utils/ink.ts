@@ -10,6 +10,7 @@ const EMPTY_ADDRESS = ''
 export type RealEvent = psp34.Event
 export type Transfer = psp34.Event_Transfer
 export type Approval = psp34.Event_Approval
+export type ChildSupport = psp34.Event_ChildAdded | psp34.Event_ChildAccepted | psp34.Event_ChildRemoved | psp34.Event_ChildRejected
 
 export const isMint = (addrOne: string, addrTwo: string): boolean => {
   return addrOne === EMPTY_ADDRESS && addrTwo !== EMPTY_ADDRESS
