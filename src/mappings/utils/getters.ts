@@ -45,7 +45,7 @@ function childOf(event: ChildSupport) {
     parent: idOf(parent),
     collection: addressOf(collection),
     child: idOf(token),
-
+  }
 }
 
 // TODO: mark what operstiation should be performed
