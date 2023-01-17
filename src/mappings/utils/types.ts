@@ -46,11 +46,7 @@ export type Processor = AddEventItem<
   EventItem<'*', false> | CallItem<'*', false>,
   EventItem<
     'Contracts.ContractEmitted',
-    {
-      readonly event: {
-        readonly args: true
-      }
-    }
+    true
   >
 >
 export type Store = EntityManager

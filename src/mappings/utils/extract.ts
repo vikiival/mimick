@@ -29,10 +29,11 @@ export function metaHandler(ctx: Context): BaseEvent[] {
 }
 
 function enhanceItems(items: Processor[], baseBlock: BaseCall): BaseEvent[] {
-  // eslint-disable-next-line id-length
+  // eslint-disable-next-line id-length, @typescript-eslint/no-unsafe-return
   return items
     .map(toBaseEvent)
     .filter(notEmpty)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     .map((e) => ({ ...baseBlock, ...e }))
 }
 
@@ -49,8 +50,8 @@ function toBase(ctx: BatchBlock<Processor>): BaseCall {
   return { caller, blockNumber, timestamp }
 }
 
-function toBaseEvent(ctx: Processor): RealEvent | null {
-  logger.info(`[EVENT]`, ctx.name)
+function toBaseEvent(ctx: Processor): any {
+  logger.info(`[EVENT]`, ctx)
   if (ctx.name === 'Contracts.ContractEmitted') {
     logger.info(
       `[CONTRACT]`,
@@ -64,6 +65,7 @@ function toBaseEvent(ctx: Processor): RealEvent | null {
   ) {
     const item = ctx.event as ContractsContractEmittedEvent
     const event = decodeEvent(item)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return matchNFTEvent(event)
   }
 
