@@ -41,6 +41,8 @@ reset: migrate
 
 quickstart: migrate process
 
+quick: build reset process
+
 new-schema: codegen build update-db
 
 prod TAG:
