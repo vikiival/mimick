@@ -5,6 +5,7 @@ import {
 import { CONTRACT_ADDRESS } from '../../constants'
 import { decodeEvent, RealEvent } from './ink'
 import logger from './logger'
+import { matchNFTEvent } from './matcher'
 import { BaseCall, Context, Processor } from './types'
 
 // function toBaseCall(extrinsic: ExtrinsicHandlerContext): BaseCall {
@@ -63,7 +64,7 @@ function toBaseEvent(ctx: Processor): RealEvent | null {
   ) {
     const item = ctx.event as ContractsContractEmittedEvent
     const event = decodeEvent(item)
-    return event
+    return matchNFTEvent(event)
   }
 
   return null
