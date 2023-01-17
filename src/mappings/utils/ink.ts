@@ -42,6 +42,11 @@ export function decodeEvent(item: ContractsContractEmittedEvent): psp34.Event {
   return psp34.decodeEvent(item.args.data)
 }
 
+// Experimental: Do not know how to use it
+export function decodeConstructor(item: string): psp34.Constructor {
+  return psp34.decodeConstructor(item)
+}
+
 export const contractFilter: DataSelection<{ event: { args: boolean } }> = {
   data: {
     event: { args: true },
