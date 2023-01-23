@@ -1,6 +1,7 @@
 import { ContractsContractEmittedEvent } from '@subsquid/substrate-processor'
 import { DataSelection } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
 import * as psp34 from '../../abi/psp34'
+import * as market from '../../abi/marketplace'
 import { Interaction } from '../../model'
 import { possibleAddress } from './helper'
 // import { Context, EvmLogHandlerOptions, Interaction } from './types'
@@ -42,9 +43,17 @@ export function decodeEvent(item: ContractsContractEmittedEvent): psp34.Event {
   return psp34.decodeEvent(item.args.data)
 }
 
+export function decodeMarketEvent(item: ContractsContractEmittedEvent): market.Event {
+  return market.decodeEvent(item.args.data)
+}
+
 // Experimental: Do not know how to use it
 export function decodeConstructor(item: string): psp34.Constructor {
   return psp34.decodeConstructor(item)
+}
+
+export function decodeMarketConstructor(item: string): market.Constructor {
+  return market.decodeConstructor(item)
 }
 
 export const contractFilter: DataSelection<{ event: { args: boolean } }> = {
