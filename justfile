@@ -81,8 +81,8 @@ tail TAG:
 dump:
 	docker exec -i mimick-db-1 /bin/bash -c "pg_dump --username postgres squid" > dump.sql
 
-ink FILE OUT:
-  npx squid-ink-typegen --abi=src/abi/{{FILE}}.json --output=src/abi/{{OUT}}.ts
+ink FILE:
+  npx squid-ink-typegen --abi=src/abi/{{FILE}}.json --output=src/abi/{{FILE}}.ts
 
 psp TAG:
 	npx squid-ink-typegen --abi=src/abi/psp{{TAG}}.json --output=src/abi/psp{{TAG}}.ts
