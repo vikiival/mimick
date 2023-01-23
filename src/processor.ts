@@ -11,7 +11,15 @@ const processor = new SubstrateBatchProcessor()
 processor.setBlockRange({ from: STARTING_BLOCK })
 processor.addContractsContractEmitted(CONTRACT_ADDRESS, {
   data: {
-    event: true,
+    event: {
+      args: true,
+      extrinsic: {
+        signature: true
+      },
+      call: {
+        origin: true,
+      },
+    },
   },
 } as const)
 

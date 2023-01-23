@@ -3,18 +3,11 @@ import {
   ContractsContractEmittedEvent,
 } from '@subsquid/substrate-processor'
 import { CONTRACT_ADDRESS } from '../../constants'
+import { addressOf } from './helper'
 import { decodeEvent, RealEvent } from './ink'
 import logger from './logger'
 import { matchNFTEvent } from './matcher'
 import { BaseCall, Context, Processor } from './types'
-
-// function toBaseCall(extrinsic: ExtrinsicHandlerContext): BaseCall {
-//   const caller = extrinsic.extrinsic.signer.toString();
-//   const blockNumber = extrinsic.block.height.toString();
-//   const timestamp = new Date(extrinsic.block.timestamp);
-
-//   return { caller, blockNumber, timestamp };
-// }
 
 type BaseEvent = BaseCall & RealEvent
 
@@ -42,7 +35,6 @@ function notEmpty<T>(value: T | null | undefined): value is T {
 }
 
 function toBase(ctx: BatchBlock<Processor>): BaseCall {
-  // const caller = addressOf(event.extrinsic?.signature?.address.value);
   const caller = ''
   const blockNumber = ctx.header.height.toString()
   const timestamp = new Date(ctx.header.timestamp)
@@ -51,7 +43,7 @@ function toBase(ctx: BatchBlock<Processor>): BaseCall {
 }
 
 function toBaseEvent(ctx: Processor): any {
-  logger.info(`[EVENT]`, ctx)
+  logger.info(`[BASE EVENT]`, ctx)
   if (ctx.name === 'Contracts.ContractEmitted') {
     logger.info(
       `[CONTRACT]`,
@@ -64,9 +56,11 @@ function toBaseEvent(ctx: Processor): any {
     ctx.event.args.contract === CONTRACT_ADDRESS
   ) {
     const item = ctx.event as ContractsContractEmittedEvent
+    const mayCaller = ctx.event.extrinsic?.signature?.address.value
+    const caller = mayCaller ? addressOf(ctx.event.extrinsic?.signature?.address.value) : undefined;
     const event = decodeEvent(item)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return matchNFTEvent(event)
+    return {...matchNFTEvent(event), caller }
   }
 
   return null
