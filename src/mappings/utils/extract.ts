@@ -57,7 +57,7 @@ function toBaseEvent(ctx: Processor): any {
   ) {
     const item = ctx.event as ContractsContractEmittedEvent
     const mayCaller = ctx.event.extrinsic?.signature?.address.value
-    const caller = mayCaller ? addressOf(ctx.event.extrinsic?.signature?.address.value) : undefined;
+    const caller = mayCaller ? addressOf(mayCaller) : undefined;
     const event = decodeEvent(item)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return {...matchNFTEvent(event), caller }
