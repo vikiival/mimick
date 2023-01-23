@@ -1420,7 +1420,7 @@ export function decodeConstructor(hex: string): Constructor {
     return _abi.decodeConstructor(hex)
 }
 
-export type Event = never
+export type Event = any
 
 export type Message = Message_MarketplaceSale_unlist | Message_MarketplaceSale_register | Message_MarketplaceSale_buy | Message_MarketplaceSale_set_marketplace_fee | Message_MarketplaceSale_set_fee_recipient | Message_MarketplaceSale_get_price | Message_MarketplaceSale_list | Message_MarketplaceSale_factory | Message_MarketplaceSale_get_max_fee | Message_MarketplaceSale_get_registered_collection | Message_MarketplaceSale_get_marketplace_fee | Message_MarketplaceSale_set_nft_contract_hash | Message_MarketplaceSale_get_fee_recipient | Message_MarketplaceSale_set_contract_metadata | Message_MarketplaceSale_nft_contract_hash
 
