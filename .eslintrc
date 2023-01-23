@@ -46,6 +46,7 @@
   "ignorePatterns": [
     "src/model/generated",
     "src/types",
+    "src/abi",
     "db"
   ]
 }
