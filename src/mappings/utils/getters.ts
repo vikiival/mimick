@@ -18,12 +18,13 @@ import {
 } from '../../abi/psp34'
 import { addressOf, idOf } from './helper'
 import { ChildSupport } from './ink'
+import { TransferTokenEvent } from './types'
 
 export function getTokenTransferEvent(event: Event_Transfer) {
   return {
     from: event.from ? addressOf(event.from) : null,
     to: event.to ? addressOf(event.to) : null,
-    id: idOf(event.id),
+    sn: idOf(event.id),
   }
 }
 
@@ -31,7 +32,7 @@ export function getTokenApprovalEvent(event: Event_Approval) {
   return {
     from: addressOf(event.from),
     to: addressOf(event.to),
-    id: event.id ? idOf(event.id) : null,
+    sn: event.id ? idOf(event.id) : null,
     approved: event.approved,
   }
 }
