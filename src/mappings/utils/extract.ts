@@ -60,11 +60,13 @@ function toBaseEvent(ctx: Processor): any {
     const caller = mayCaller ? addressOf(mayCaller) : undefined;
     const event = decodeEvent(item)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return {...matchNFTEvent(event), caller }
+    return {...matchNFTEvent(event), caller, contract: ctx.event.args.contract }
   }
 
   return null
 }
+
+
 
 // export function unwrap<T>(ctx: Context, unwrapFn: UnwrapFunc<T>): CallWith<T> {
 //   const baseCall = toBaseCall(ctx);
