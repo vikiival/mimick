@@ -1,7 +1,9 @@
+import { isEvent } from '@kodadot1/metasquid/is'
 import {
   BatchBlock,
-  ContractsContractEmittedEvent,
+  ContractsContractEmittedEvent
 } from '@subsquid/substrate-processor'
+
 import { CONTRACT_ADDRESS } from '../../constants'
 import { addressOf } from './helper'
 import { decodeEvent, RealEvent } from './ink'
@@ -24,6 +26,7 @@ export function metaHandler(ctx: Context): BaseEvent[] {
 function enhanceItems(items: Processor[], baseBlock: BaseCall): BaseEvent[] {
   // eslint-disable-next-line id-length, @typescript-eslint/no-unsafe-return
   return items
+    .filter(isEvent)
     .map(toBaseEvent)
     .filter(notEmpty)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
