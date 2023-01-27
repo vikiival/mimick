@@ -2,7 +2,7 @@ import {Abi} from "@subsquid/ink-abi"
 
 export const metadata = {
   "source": {
-    "hash": "0xedf9dde8b7c52a23ef3972268217a92f3c356707388aaa68a3952e31973797c3",
+    "hash": "0x9d617383b1a99da401a2052ebbbc2eee40964d0c461a15127c016e30de8e6feb",
     "language": "ink! 3.4.0",
     "compiler": "rustc 1.67.0-nightly"
   },
@@ -35,7 +35,109 @@ export const metadata = {
         }
       ],
       "docs": [],
-      "events": [],
+      "events": [
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "contract",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "id",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 12
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "price",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 24
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when token is listed or unlisted"
+          ],
+          "label": "TokenListed"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "contract",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "id",
+              "type": {
+                "displayName": [
+                  "Id"
+                ],
+                "type": 12
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "price",
+              "type": {
+                "displayName": [
+                  "Balance"
+                ],
+                "type": 15
+              }
+            }
+          ],
+          "docs": [
+            " Event emited when a token is bought"
+          ],
+          "label": "TokenBought"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "contract",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "docs": [
+            " Event emitted when a NFT contract is registered to the marketplace."
+          ],
+          "label": "CollectionRegistered"
+        }
+      ],
       "messages": [
         {
           "args": [
@@ -44,7 +146,7 @@ export const metadata = {
               "type": {
                 "displayName": [
                   "marketplacesale_external",
-                  "UnlistInput1"
+                  "ListInput1"
                 ],
                 "type": 0
               }
@@ -54,26 +156,64 @@ export const metadata = {
               "type": {
                 "displayName": [
                   "marketplacesale_external",
-                  "UnlistInput2"
+                  "ListInput2"
                 ],
                 "type": 12
+              }
+            },
+            {
+              "label": "price",
+              "type": {
+                "displayName": [
+                  "marketplacesale_external",
+                  "ListInput3"
+                ],
+                "type": 15
               }
             }
           ],
           "docs": [
-            " Removes a NFT from the marketplace sale."
+            " Creates a NFT item sale on the marketplace."
           ],
-          "label": "MarketplaceSale::unlist",
+          "label": "MarketplaceSale::list",
           "mutates": true,
           "payable": false,
           "returnType": {
             "displayName": [
               "marketplacesale_external",
-              "UnlistOutput"
+              "ListOutput"
             ],
             "type": 20
           },
-          "selector": "0x0e02ef2c"
+          "selector": "0x9aea6f9e"
+        },
+        {
+          "args": [
+            {
+              "label": "contract_hash",
+              "type": {
+                "displayName": [
+                  "marketplacesale_external",
+                  "SetNftContractHashInput1"
+                ],
+                "type": 19
+              }
+            }
+          ],
+          "docs": [
+            " Sets a hash of a Shiden34 contract to be instantiated by factory call."
+          ],
+          "label": "MarketplaceSale::set_nft_contract_hash",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "marketplacesale_external",
+              "SetNftContractHashOutput"
+            ],
+            "type": 20
+          },
+          "selector": "0xe4d9f02e"
         },
         {
           "args": [
@@ -134,98 +274,21 @@ export const metadata = {
           "selector": "0x8b3b40f3"
         },
         {
-          "args": [
-            {
-              "label": "contract_address",
-              "type": {
-                "displayName": [
-                  "marketplacesale_external",
-                  "BuyInput1"
-                ],
-                "type": 0
-              }
-            },
-            {
-              "label": "token_id",
-              "type": {
-                "displayName": [
-                  "marketplacesale_external",
-                  "BuyInput2"
-                ],
-                "type": 12
-              }
-            }
-          ],
+          "args": [],
           "docs": [
-            " Buys NFT item from the marketplace."
+            " Gets the marketplace fee."
           ],
-          "label": "MarketplaceSale::buy",
-          "mutates": true,
-          "payable": true,
-          "returnType": {
-            "displayName": [
-              "marketplacesale_external",
-              "BuyOutput"
-            ],
-            "type": 20
-          },
-          "selector": "0xdbdb7c1d"
-        },
-        {
-          "args": [
-            {
-              "label": "fee",
-              "type": {
-                "displayName": [
-                  "marketplacesale_external",
-                  "SetMarketplaceFeeInput1"
-                ],
-                "type": 7
-              }
-            }
-          ],
-          "docs": [
-            " Sets the marketplace fee."
-          ],
-          "label": "MarketplaceSale::set_marketplace_fee",
-          "mutates": true,
+          "label": "MarketplaceSale::get_marketplace_fee",
+          "mutates": false,
           "payable": false,
           "returnType": {
             "displayName": [
               "marketplacesale_external",
-              "SetMarketplaceFeeOutput"
+              "GetMarketplaceFeeOutput"
             ],
-            "type": 20
+            "type": 7
           },
-          "selector": "0x56e9ac75"
-        },
-        {
-          "args": [
-            {
-              "label": "fee_recipient",
-              "type": {
-                "displayName": [
-                  "marketplacesale_external",
-                  "SetFeeRecipientInput1"
-                ],
-                "type": 0
-              }
-            }
-          ],
-          "docs": [
-            " Sets the marketplace fee recipient."
-          ],
-          "label": "MarketplaceSale::set_fee_recipient",
-          "mutates": true,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "marketplacesale_external",
-              "SetFeeRecipientOutput"
-            ],
-            "type": 20
-          },
-          "selector": "0x1d09a9b4"
+          "selector": "0xd670d2c9"
         },
         {
           "args": [
@@ -266,13 +329,96 @@ export const metadata = {
           "selector": "0x7508d5eb"
         },
         {
+          "args": [],
+          "docs": [
+            " Gets Shiden34 contract hash."
+          ],
+          "label": "MarketplaceSale::nft_contract_hash",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "marketplacesale_external",
+              "NftContractHashOutput"
+            ],
+            "type": 19
+          },
+          "selector": "0x2a0d765f"
+        },
+        {
           "args": [
             {
               "label": "contract_address",
               "type": {
                 "displayName": [
                   "marketplacesale_external",
-                  "ListInput1"
+                  "SetContractMetadataInput1"
+                ],
+                "type": 0
+              }
+            },
+            {
+              "label": "ipfs",
+              "type": {
+                "displayName": [
+                  "marketplacesale_external",
+                  "SetContractMetadataInput2"
+                ],
+                "type": 6
+              }
+            }
+          ],
+          "docs": [
+            " Sets contract metadata (ipfs url)"
+          ],
+          "label": "MarketplaceSale::set_contract_metadata",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "marketplacesale_external",
+              "SetContractMetadataOutput"
+            ],
+            "type": 20
+          },
+          "selector": "0x8c3fd1c7"
+        },
+        {
+          "args": [
+            {
+              "label": "fee_recipient",
+              "type": {
+                "displayName": [
+                  "marketplacesale_external",
+                  "SetFeeRecipientInput1"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "docs": [
+            " Sets the marketplace fee recipient."
+          ],
+          "label": "MarketplaceSale::set_fee_recipient",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "marketplacesale_external",
+              "SetFeeRecipientOutput"
+            ],
+            "type": 20
+          },
+          "selector": "0x1d09a9b4"
+        },
+        {
+          "args": [
+            {
+              "label": "contract_address",
+              "type": {
+                "displayName": [
+                  "marketplacesale_external",
+                  "BuyInput1"
                 ],
                 "type": 0
               }
@@ -282,36 +428,26 @@ export const metadata = {
               "type": {
                 "displayName": [
                   "marketplacesale_external",
-                  "ListInput2"
+                  "BuyInput2"
                 ],
                 "type": 12
-              }
-            },
-            {
-              "label": "price",
-              "type": {
-                "displayName": [
-                  "marketplacesale_external",
-                  "ListInput3"
-                ],
-                "type": 15
               }
             }
           ],
           "docs": [
-            " Creates a NFT item sale on the marketplace."
+            " Buys NFT item from the marketplace."
           ],
-          "label": "MarketplaceSale::list",
+          "label": "MarketplaceSale::buy",
           "mutates": true,
-          "payable": false,
+          "payable": true,
           "returnType": {
             "displayName": [
               "marketplacesale_external",
-              "ListOutput"
+              "BuyOutput"
             ],
             "type": 20
           },
-          "selector": "0x9aea6f9e"
+          "selector": "0xdbdb7c1d"
         },
         {
           "args": [
@@ -412,6 +548,72 @@ export const metadata = {
           "selector": "0x5c479c97"
         },
         {
+          "args": [
+            {
+              "label": "fee",
+              "type": {
+                "displayName": [
+                  "marketplacesale_external",
+                  "SetMarketplaceFeeInput1"
+                ],
+                "type": 7
+              }
+            }
+          ],
+          "docs": [
+            " Sets the marketplace fee."
+          ],
+          "label": "MarketplaceSale::set_marketplace_fee",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "marketplacesale_external",
+              "SetMarketplaceFeeOutput"
+            ],
+            "type": 20
+          },
+          "selector": "0x56e9ac75"
+        },
+        {
+          "args": [
+            {
+              "label": "contract_address",
+              "type": {
+                "displayName": [
+                  "marketplacesale_external",
+                  "UnlistInput1"
+                ],
+                "type": 0
+              }
+            },
+            {
+              "label": "token_id",
+              "type": {
+                "displayName": [
+                  "marketplacesale_external",
+                  "UnlistInput2"
+                ],
+                "type": 12
+              }
+            }
+          ],
+          "docs": [
+            " Removes a NFT from the marketplace sale."
+          ],
+          "label": "MarketplaceSale::unlist",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "marketplacesale_external",
+              "UnlistOutput"
+            ],
+            "type": 20
+          },
+          "selector": "0x0e02ef2c"
+        },
+        {
           "args": [],
           "docs": [
             " Gets max fee that can be applied to an item price."
@@ -459,51 +661,6 @@ export const metadata = {
         {
           "args": [],
           "docs": [
-            " Gets the marketplace fee."
-          ],
-          "label": "MarketplaceSale::get_marketplace_fee",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "marketplacesale_external",
-              "GetMarketplaceFeeOutput"
-            ],
-            "type": 7
-          },
-          "selector": "0xd670d2c9"
-        },
-        {
-          "args": [
-            {
-              "label": "contract_hash",
-              "type": {
-                "displayName": [
-                  "marketplacesale_external",
-                  "SetNftContractHashInput1"
-                ],
-                "type": 19
-              }
-            }
-          ],
-          "docs": [
-            " Sets a hash of a Shiden34 contract to be instantiated by factory call."
-          ],
-          "label": "MarketplaceSale::set_nft_contract_hash",
-          "mutates": true,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "marketplacesale_external",
-              "SetNftContractHashOutput"
-            ],
-            "type": 20
-          },
-          "selector": "0xe4d9f02e"
-        },
-        {
-          "args": [],
-          "docs": [
             " Gets the marketplace fee recipient."
           ],
           "label": "MarketplaceSale::get_fee_recipient",
@@ -517,61 +674,6 @@ export const metadata = {
             "type": 0
           },
           "selector": "0xa8f2f9a7"
-        },
-        {
-          "args": [
-            {
-              "label": "contract_address",
-              "type": {
-                "displayName": [
-                  "marketplacesale_external",
-                  "SetContractMetadataInput1"
-                ],
-                "type": 0
-              }
-            },
-            {
-              "label": "ipfs",
-              "type": {
-                "displayName": [
-                  "marketplacesale_external",
-                  "SetContractMetadataInput2"
-                ],
-                "type": 6
-              }
-            }
-          ],
-          "docs": [
-            " Sets contract metadata (ipfs url)"
-          ],
-          "label": "MarketplaceSale::set_contract_metadata",
-          "mutates": true,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "marketplacesale_external",
-              "SetContractMetadataOutput"
-            ],
-            "type": 20
-          },
-          "selector": "0x8c3fd1c7"
-        },
-        {
-          "args": [],
-          "docs": [
-            " Gets Shiden34 contract hash."
-          ],
-          "label": "MarketplaceSale::nft_contract_hash",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "marketplacesale_external",
-              "NftContractHashOutput"
-            ],
-            "type": 19
-          },
-          "selector": "0x2a0d765f"
         }
       ]
     },
@@ -1420,17 +1522,45 @@ export function decodeConstructor(hex: string): Constructor {
     return _abi.decodeConstructor(hex)
 }
 
-export type Event = any
+export type Event = Event_TokenListed | Event_TokenBought | Event_CollectionRegistered
 
-export type Message = Message_MarketplaceSale_unlist | Message_MarketplaceSale_register | Message_MarketplaceSale_buy | Message_MarketplaceSale_set_marketplace_fee | Message_MarketplaceSale_set_fee_recipient | Message_MarketplaceSale_get_price | Message_MarketplaceSale_list | Message_MarketplaceSale_factory | Message_MarketplaceSale_get_max_fee | Message_MarketplaceSale_get_registered_collection | Message_MarketplaceSale_get_marketplace_fee | Message_MarketplaceSale_set_nft_contract_hash | Message_MarketplaceSale_get_fee_recipient | Message_MarketplaceSale_set_contract_metadata | Message_MarketplaceSale_nft_contract_hash
+export interface Event_TokenListed {
+    __kind: 'TokenListed'
+    contract: Uint8Array
+    id: Id
+    price: (bigint | undefined)
+}
+
+export interface Event_TokenBought {
+    __kind: 'TokenBought'
+    contract: Uint8Array
+    id: Id
+    price: bigint
+}
+
+export interface Event_CollectionRegistered {
+    __kind: 'CollectionRegistered'
+    contract: Uint8Array
+}
+
+export type Message = Message_MarketplaceSale_list | Message_MarketplaceSale_set_nft_contract_hash | Message_MarketplaceSale_register | Message_MarketplaceSale_get_marketplace_fee | Message_MarketplaceSale_get_price | Message_MarketplaceSale_nft_contract_hash | Message_MarketplaceSale_set_contract_metadata | Message_MarketplaceSale_set_fee_recipient | Message_MarketplaceSale_buy | Message_MarketplaceSale_factory | Message_MarketplaceSale_set_marketplace_fee | Message_MarketplaceSale_unlist | Message_MarketplaceSale_get_max_fee | Message_MarketplaceSale_get_registered_collection | Message_MarketplaceSale_get_fee_recipient
 
 /**
- *  Removes a NFT from the marketplace sale.
+ *  Creates a NFT item sale on the marketplace.
  */
-export interface Message_MarketplaceSale_unlist {
-    __kind: 'MarketplaceSale_unlist'
+export interface Message_MarketplaceSale_list {
+    __kind: 'MarketplaceSale_list'
     contractAddress: Uint8Array
     tokenId: Id
+    price: bigint
+}
+
+/**
+ *  Sets a hash of a Shiden34 contract to be instantiated by factory call.
+ */
+export interface Message_MarketplaceSale_set_nft_contract_hash {
+    __kind: 'MarketplaceSale_set_nft_contract_hash'
+    contractHash: SetNftContractHashInput1
 }
 
 /**
@@ -1445,28 +1575,10 @@ export interface Message_MarketplaceSale_register {
 }
 
 /**
- *  Buys NFT item from the marketplace.
+ *  Gets the marketplace fee.
  */
-export interface Message_MarketplaceSale_buy {
-    __kind: 'MarketplaceSale_buy'
-    contractAddress: Uint8Array
-    tokenId: Id
-}
-
-/**
- *  Sets the marketplace fee.
- */
-export interface Message_MarketplaceSale_set_marketplace_fee {
-    __kind: 'MarketplaceSale_set_marketplace_fee'
-    fee: number
-}
-
-/**
- *  Sets the marketplace fee recipient.
- */
-export interface Message_MarketplaceSale_set_fee_recipient {
-    __kind: 'MarketplaceSale_set_fee_recipient'
-    feeRecipient: Uint8Array
+export interface Message_MarketplaceSale_get_marketplace_fee {
+    __kind: 'MarketplaceSale_get_marketplace_fee'
 }
 
 /**
@@ -1479,13 +1591,36 @@ export interface Message_MarketplaceSale_get_price {
 }
 
 /**
- *  Creates a NFT item sale on the marketplace.
+ *  Gets Shiden34 contract hash.
  */
-export interface Message_MarketplaceSale_list {
-    __kind: 'MarketplaceSale_list'
+export interface Message_MarketplaceSale_nft_contract_hash {
+    __kind: 'MarketplaceSale_nft_contract_hash'
+}
+
+/**
+ *  Sets contract metadata (ipfs url)
+ */
+export interface Message_MarketplaceSale_set_contract_metadata {
+    __kind: 'MarketplaceSale_set_contract_metadata'
+    contractAddress: Uint8Array
+    ipfs: Uint8Array
+}
+
+/**
+ *  Sets the marketplace fee recipient.
+ */
+export interface Message_MarketplaceSale_set_fee_recipient {
+    __kind: 'MarketplaceSale_set_fee_recipient'
+    feeRecipient: Uint8Array
+}
+
+/**
+ *  Buys NFT item from the marketplace.
+ */
+export interface Message_MarketplaceSale_buy {
+    __kind: 'MarketplaceSale_buy'
     contractAddress: Uint8Array
     tokenId: Id
-    price: bigint
 }
 
 /**
@@ -1504,6 +1639,23 @@ export interface Message_MarketplaceSale_factory {
 }
 
 /**
+ *  Sets the marketplace fee.
+ */
+export interface Message_MarketplaceSale_set_marketplace_fee {
+    __kind: 'MarketplaceSale_set_marketplace_fee'
+    fee: number
+}
+
+/**
+ *  Removes a NFT from the marketplace sale.
+ */
+export interface Message_MarketplaceSale_unlist {
+    __kind: 'MarketplaceSale_unlist'
+    contractAddress: Uint8Array
+    tokenId: Id
+}
+
+/**
  *  Gets max fee that can be applied to an item price.
  */
 export interface Message_MarketplaceSale_get_max_fee {
@@ -1519,41 +1671,10 @@ export interface Message_MarketplaceSale_get_registered_collection {
 }
 
 /**
- *  Gets the marketplace fee.
- */
-export interface Message_MarketplaceSale_get_marketplace_fee {
-    __kind: 'MarketplaceSale_get_marketplace_fee'
-}
-
-/**
- *  Sets a hash of a Shiden34 contract to be instantiated by factory call.
- */
-export interface Message_MarketplaceSale_set_nft_contract_hash {
-    __kind: 'MarketplaceSale_set_nft_contract_hash'
-    contractHash: SetNftContractHashInput1
-}
-
-/**
  *  Gets the marketplace fee recipient.
  */
 export interface Message_MarketplaceSale_get_fee_recipient {
     __kind: 'MarketplaceSale_get_fee_recipient'
-}
-
-/**
- *  Sets contract metadata (ipfs url)
- */
-export interface Message_MarketplaceSale_set_contract_metadata {
-    __kind: 'MarketplaceSale_set_contract_metadata'
-    contractAddress: Uint8Array
-    ipfs: Uint8Array
-}
-
-/**
- *  Gets Shiden34 contract hash.
- */
-export interface Message_MarketplaceSale_nft_contract_hash {
-    __kind: 'MarketplaceSale_nft_contract_hash'
 }
 
 export type Constructor = Constructor_new
@@ -1595,8 +1716,8 @@ export interface Id_Bytes {
     value: Uint8Array
 }
 
-export type FactoryInput7 = bigint
-
 export type SetNftContractHashInput1 = Uint8Array
+
+export type FactoryInput7 = bigint
 
 export type Result<T, E> = {__kind: 'Ok', value: T} | {__kind: 'Err', value: E}
