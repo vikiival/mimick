@@ -5,10 +5,12 @@ import { serializer } from './utils/serializer'
 import { Context } from './utils/types'
 
 export async function mainFrame(context: Context): Promise<void> {
-  const event = metaHandler(context)
-  // sleep for 1 second to avoid rate limit
+  const events = metaHandler(context)
+
+  
+
   await new Promise(resolve => setTimeout(resolve, 10))
-  for (const e of event) {
+  for (const e of events) {
     logger.info(`[EVENT]: ${JSON.stringify(e, serializer, 2)}`)
   }
 }
