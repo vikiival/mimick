@@ -25,6 +25,7 @@ export function getTokenTransferEvent(event: Event_Transfer) {
     from: event.from ? addressOf(event.from) : null,
     to: event.to ? addressOf(event.to) : null,
     sn: idOf(event.id),
+    __kind: event.__kind,
   }
 }
 
@@ -34,6 +35,7 @@ export function getTokenApprovalEvent(event: Event_Approval) {
     to: addressOf(event.to),
     sn: event.id ? idOf(event.id) : null,
     approved: event.approved,
+    __kind: event.__kind,
   }
 }
 
@@ -46,6 +48,7 @@ function childOf(event: ChildSupport) {
     parent: idOf(parent),
     collection: addressOf(collection),
     child: idOf(token),
+    __kind: event.__kind,
   }
 }
 
