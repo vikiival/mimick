@@ -1,8 +1,8 @@
 ---
 name: Report
 about: Status check for Astar & related teams
-title: "[REPORT]"
-labels: ''
+title: "[REPORT] Status check DD.MM"
+labels: 'report'
 assignees: ''
 
 ---
