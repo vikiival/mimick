@@ -20,7 +20,7 @@ import {
 } from '../../abi/psp34'
 import { addressOf, idOf } from './helper'
 import { ChildSupport, whatIsThisTransfer, SuperEvent as Super } from './ink'
-import { EventExtra, Interaction, tokenIdOf, TransferTokenEvent } from './types'
+import { EventExtra, Interaction, tokenIdOf, TransferTokenEvent, WithId } from './types'
 
 
 // Every Getter should return object that contains: event, and data 
@@ -48,6 +48,27 @@ export function getTokenTransferEvent(event: Event_Transfer, { block, caller, co
     update: () => {}
   }
 
+}
+
+// function getCreateTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra) {
+//   const transfer = transferOf(event, contract)
+// }
+
+// function getTransferTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra) {
+//   const transfer = transferOf(event, contract)
+// }
+
+// function getBurnTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra) {
+//   const transfer = transferOf(event, contract)
+// }
+
+function transferOf(event: Event_Transfer, collectionId: string): TransferTokenEvent & WithId {
+  const from = event.from ? addressOf(event.from) : '';
+  const to = event.to ? addressOf(event.to) : '';
+  const sn = idOf(event.id)
+  const id = tokenIdOf({ collectionId, sn })
+
+  return { id, caller: from, to, sn, collectionId }
 }
 
 export function getTokenApprovalEvent(event: Event_Approval) {

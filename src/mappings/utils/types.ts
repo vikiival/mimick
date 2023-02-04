@@ -11,8 +11,9 @@ import {
 import { nanoid } from 'nanoid'
 import { EntityManager } from 'typeorm'
 
-import { BaseBlock } from '@kodadot1/metasquid/types'
+import { BaseBlock, IEvent } from '@kodadot1/metasquid/types'
 import { Interaction } from '../../model/generated/_interaction'
+import { NFTEntity } from '../../model'
 
 export type BaseCall = {
   caller: string
@@ -66,9 +67,11 @@ export type MetaContext = Context
 //   meta: string;
 // }
 
-export type BaseCollectionEvent = WithCaller & {
+export type WithId = {
   id: string
 }
+
+export type BaseCollectionEvent = WithCaller & WithId
 
 export type BaseTokenEvent = CollectionId & {
   sn: string
@@ -133,6 +136,15 @@ export type SomethingWithOptionalMeta = {
 
 export type WithCount = {
   count: bigint
+}
+
+export type MetaEvent = {
+  state: Partial<NFTEntity>
+  event: IEvent<Interaction>,
+  block: BaseBlock
+  // caller: string,
+  // id: string,
+  // contract: string
 }
 
 export type EventExtra = WithBlock & WithCaller & WithContract
