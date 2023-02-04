@@ -135,6 +135,8 @@ export type WithCount = {
   count: bigint
 }
 
+export type EventExtra = WithBlock & WithCaller & WithContract
+
 export type UnwrapFunc<T> = (ctx: Context) => T
 export type SanitizerFunc = (url: string) => string
 

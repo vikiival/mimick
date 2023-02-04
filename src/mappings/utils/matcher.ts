@@ -1,10 +1,10 @@
-import { RealEvent } from './ink';
+import { SuperEvent } from './ink';
 import * as g from './getters'
 
-export const matchNFTEvent = (event: RealEvent): any => {
+export const matchNFTEvent = ({ event, ...rest }: SuperEvent): any => {
   switch (event.__kind) {
     case 'Transfer':
-      return g.getTokenTransferEvent(event)
+      return g.getTokenTransferEvent(event, rest)
     case 'Approval':
       return g.getTokenApprovalEvent(event)
     case 'ChildAdded':

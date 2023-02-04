@@ -5,7 +5,7 @@ import * as market from '../../abi/marketplace'
 import * as psp34 from '../../abi/psp34'
 import { Interaction } from '../../model'
 import { possibleAddress } from './helper'
-import { Processor, WithBlock, WithContract } from './types'
+import { EventExtra } from './types'
 // import { Context, EvmLogHandlerOptions, Interaction } from './types'
 // import { EvmLog, getEvmLog } from '@subsquid/ink-abi'
 
@@ -67,4 +67,4 @@ export const contractFilter: DataSelection<{ event: { args: boolean } }> = {
 export type WithEvent<T = RealEvent> = {
   event: T
 }
-export type SuperEvent<T = RealEvent> = WithEvent<T> & WithBlock & WithCaller & WithContract
+export type SuperEvent<T = RealEvent> = WithEvent<T> & EventExtra
