@@ -1,19 +1,18 @@
 import type {
   BatchProcessorItem,
-  SubstrateBatchProcessor,
+  SubstrateBatchProcessor
 } from '@subsquid/substrate-processor'
 import { BatchContext } from '@subsquid/substrate-processor'
 import {
   AddEventItem,
   CallItem,
-  EventItem,
+  EventItem
 } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
-import md5 from 'md5'
 import { nanoid } from 'nanoid'
 import { EntityManager } from 'typeorm'
 
+import { BaseBlock } from '@kodadot1/metasquid/types'
 import { Interaction } from '../../model/generated/_interaction'
-import { Attribute } from '../../model/generated/_attribute'
 
 export type BaseCall = {
   caller: string
@@ -114,6 +113,14 @@ export type WithAmount = {
 
 export type WithCaller = {
   caller: string
+}
+
+export type WithBlock = {
+  block: BaseBlock
+}
+
+export type WithContract = {
+  contract: string
 }
 
 export type SomethingWithMeta = {
