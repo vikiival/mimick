@@ -1,9 +1,11 @@
+import { WithCaller } from '@kodadot1/metasquid/types'
 import { ContractsContractEmittedEvent } from '@subsquid/substrate-processor'
 import { DataSelection } from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
-import * as psp34 from '../../abi/psp34'
 import * as market from '../../abi/marketplace'
+import * as psp34 from '../../abi/psp34'
 import { Interaction } from '../../model'
 import { possibleAddress } from './helper'
+import { Processor, WithBlock, WithContract } from './types'
 // import { Context, EvmLogHandlerOptions, Interaction } from './types'
 // import { EvmLog, getEvmLog } from '@subsquid/ink-abi'
 
@@ -61,3 +63,8 @@ export const contractFilter: DataSelection<{ event: { args: boolean } }> = {
     event: { args: true },
   },
 }
+
+export type WithEvent<T = RealEvent> = {
+  event: T
+}
+export type SuperEvent<T = RealEvent> = WithEvent<T> & WithBlock & WithCaller & WithContract
