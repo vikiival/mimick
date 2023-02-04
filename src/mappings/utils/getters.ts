@@ -1,6 +1,8 @@
 // Disable eslint for in state of development
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { eventFrom } from '@kodadot1/metasquid'
+import { BaseBlock } from '@kodadot1/metasquid/types'
 import {
   Event_Transfer,
   Event_Approval,
@@ -17,16 +19,35 @@ import {
   // Event_AssetPrioritySet,
 } from '../../abi/psp34'
 import { addressOf, idOf } from './helper'
-import { ChildSupport } from './ink'
-import { TransferTokenEvent } from './types'
+import { ChildSupport, whatIsThisTransfer, SuperEvent as Super } from './ink'
+import { EventExtra, Interaction, tokenIdOf, TransferTokenEvent } from './types'
 
-export function getTokenTransferEvent(event: Event_Transfer) {
+
+// Every Getter should return object that contains: event, and data 
+
+export function getTokenTransferEvent(event: Event_Transfer, { block, caller, contract }: EventExtra) {
+  const from = event.from ? addressOf(event.from) : '';
+  const to = event.to ? addressOf(event.to) : '';
+  const sn = idOf(event.id)
+
+  const kind = whatIsThisTransfer(event)
+  const meta = to
+  const currentOwner = from
+  
+
   return {
-    from: event.from ? addressOf(event.from) : null,
-    to: event.to ? addressOf(event.to) : null,
-    sn: idOf(event.id),
     __kind: event.__kind,
+    interaction: {
+      id: tokenIdOf({ collectionId: contract, sn }),
+      from, to, sn
+    },
+    event: eventFrom<Interaction>(kind, { ...block, caller }, meta, currentOwner),
+    contract,
+    block,
+    caller,
+    update: () => {}
   }
+
 }
 
 export function getTokenApprovalEvent(event: Event_Approval) {
