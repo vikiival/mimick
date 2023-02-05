@@ -4,15 +4,15 @@ import {
   ContractsContractEmittedEvent
 } from '@subsquid/substrate-processor'
 
-import { BaseBlock } from '@kodadot1/metasquid/types'
+import { BaseBlock, Optional } from '@kodadot1/metasquid/types'
 import { CONTRACT_ADDRESS } from '../../constants'
 import { addressOf } from './helper'
-import { decodeEvent, RealEvent } from './ink'
+import { decodeEvent } from './ink'
 import logger from './logger'
 import { matchNFTEvent } from './matcher'
-import { BaseCall, Context, Processor, WithBlock } from './types'
+import { Context, MetaEvent, Processor, WithBlock } from './types'
 
-type BaseEvent = BaseCall & RealEvent
+type BaseEvent = MetaEvent
 type MagicItem = Processor & WithBlock
 
 export function metaHandler(ctx: Context): BaseEvent[] {
@@ -34,7 +34,7 @@ function enhanceItems(items: Processor[], baseBlock: BaseBlock): BaseEvent[] {
     .map(toBaseEvent)
     .filter(notEmpty)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    .map((e) => ({ ...baseBlock, ...e }))
+    // .map((e) => ({ ...baseBlock, ...e }))
 }
 
 function addBlock<T = Processor>(block: BaseBlock): (item: T) => T & WithBlock {
@@ -52,7 +52,7 @@ function toBase(ctx: BatchBlock<Processor>): BaseBlock {
   return { blockNumber, timestamp }
 }
 
-function toBaseEvent(ctx: MagicItem): any {
+function toBaseEvent(ctx: MagicItem): Optional<MetaEvent> {
   logger.info(`[BASE EVENT]`, ctx)
   if (ctx.name === 'Contracts.ContractEmitted') {
     logger.info(
