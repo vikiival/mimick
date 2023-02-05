@@ -144,12 +144,13 @@ export type MetaEvent = {
   block: BaseBlock
   // caller: string,
   id: string,
-  contract: string
+  contract: string,
+  interaction: Interaction
 }
 
 export type WithHooks = {
-  before?: (ctx: Context) => Promise<void>
-  after?: (ctx: Context) => Promise<void>
+  before?: (ctx: Context) => void | Promise<void>
+  after?: (ctx: Context) => void | Promise<void>
 }
 
 export type EventExtra = WithBlock & WithCaller & WithContract
