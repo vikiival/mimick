@@ -67,10 +67,11 @@ function toBaseEvent(ctx: MagicItem): any {
   ) {
     const item = ctx.event as ContractsContractEmittedEvent
     const mayCaller = ctx.event.extrinsic?.signature?.address.value
-    const caller = mayCaller ? addressOf(mayCaller) : undefined;
+    const caller = addressOf(mayCaller);
     const event = decodeEvent(item)
+    const contract = addressOf(ctx.event.args.contract)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return {...matchNFTEvent(event), caller, contract: ctx.event.args.contract }
+    return matchNFTEvent({ event, contract, block: ctx.block, caller })
   }
 
   return null
