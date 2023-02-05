@@ -2,7 +2,7 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { eventFrom } from '@kodadot1/metasquid'
-import { BaseBlock } from '@kodadot1/metasquid/types'
+import md5 from 'md5'
 import {
   Event_Transfer,
   Event_Approval,
@@ -19,48 +19,82 @@ import {
   // Event_AssetPrioritySet,
 } from '../../abi/psp34'
 import { addressOf, idOf } from './helper'
-import { ChildSupport, whatIsThisTransfer, SuperEvent as Super } from './ink'
-import { EventExtra, Interaction, tokenIdOf, TransferTokenEvent, WithId } from './types'
+import { ChildSupport, whatIsThisTransfer } from './ink'
+import { EventExtra, Interaction, MetaEvent, tokenIdOf, TransferTokenEvent, WithId } from './types'
 
 
 // Every Getter should return object that contains: event, and data 
 
-export function getTokenTransferEvent(event: Event_Transfer, { block, caller, contract }: EventExtra) {
-  const from = event.from ? addressOf(event.from) : '';
-  const to = event.to ? addressOf(event.to) : '';
-  const sn = idOf(event.id)
-
+export function getTokenTransferEvent(event: Event_Transfer, extra: EventExtra): MetaEvent {
   const kind = whatIsThisTransfer(event)
-  const meta = to
-  const currentOwner = from
-  
 
-  return {
-    __kind: event.__kind,
-    interaction: {
-      id: tokenIdOf({ collectionId: contract, sn }),
-      from, to, sn
-    },
-    event: eventFrom<Interaction>(kind, { ...block, caller }, meta, currentOwner),
-    contract,
-    block,
-    caller,
-    update: () => {}
+  switch (kind) {
+    case Interaction.MINTNFT:
+      return getCreateTokenEvent(event, extra)
+    case Interaction.SEND:
+      return getTransferTokenEvent(event, extra)
+    case Interaction.CONSUME:
+      return getBurnTokenEvent(event, extra)
+    default:
+      throw new Error(`Unknown transfer kind: ${kind}`)
   }
-
 }
 
-// function getCreateTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra) {
-//   const transfer = transferOf(event, contract)
-// }
+function getCreateTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra): MetaEvent {
+  const { id, caller: from, to, sn, collectionId } = transferOf(event, contract)
 
-// function getTransferTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra) {
-//   const transfer = transferOf(event, contract)
-// }
+  return {
+    id,
+    block,
+    contract,
+    interaction: Interaction.MINTNFT,
+    event: eventFrom(Interaction.MINTNFT, { ...block, caller }, '', to),
+    state: {
+      id,
+      hash: md5(id),
+      issuer: caller,
+      currentOwner: caller,
+      blockNumber: BigInt(block.blockNumber),
+      sn,
+      price: BigInt(0),
+      burned: false,
+      createdAt: block.timestamp,
+      updatedAt: block.timestamp
+    },
+  }
+}
 
-// function getBurnTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra) {
-//   const transfer = transferOf(event, contract)
-// }
+function getTransferTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra): MetaEvent {
+  const { id, caller: from, to, sn, collectionId } = transferOf(event, contract)
+
+  return {
+    id,
+    block,
+    contract,
+    interaction: Interaction.SEND,
+    event: eventFrom(Interaction.SEND, { ...block, caller }, to, from),
+    state: {
+      currentOwner: to,
+      updatedAt: block.timestamp
+    },
+  }
+}
+
+function getBurnTokenEvent(event: Event_Transfer, { block, caller, contract }: EventExtra): MetaEvent {
+  const { id, caller: from, to, sn, collectionId } = transferOf(event, contract)
+
+  return {
+    id,
+    block,
+    contract,
+    interaction: Interaction.CONSUME,
+    event: eventFrom(Interaction.CONSUME, { ...block, caller }, '', from),
+    state: {
+      burned: true,
+      updatedAt: block.timestamp
+    },
+  }
+}
 
 function transferOf(event: Event_Transfer, collectionId: string): TransferTokenEvent & WithId {
   const from = event.from ? addressOf(event.from) : '';
