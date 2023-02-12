@@ -1,6 +1,6 @@
 import { Optional } from '@kodadot1/metasquid/types'
 import * as g from './getters'
-import { SuperEvent } from './ink'
+import { SuperEvent, SuperMarketEvent } from './ink'
 import { MetaEvent } from './types'
 
 export const matchNFTEvent = ({ event, ...rest }: SuperEvent): Optional<MetaEvent> => {
@@ -32,6 +32,17 @@ export const matchNFTEvent = ({ event, ...rest }: SuperEvent): Optional<MetaEven
     default:
       return null
   }
+}
+
+export const matchMarketEvent = ({ event, ...rest }: SuperMarketEvent): Optional<MetaEvent> => {
+  switch (event.__kind) {
+    case 'CollectionRegistered':
+    case 'TokenListed':
+    case 'TokenBought':
+    default:
+      return null
+  }
+
 }
 
 
