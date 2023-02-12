@@ -5,15 +5,16 @@ import {
 } from '@subsquid/substrate-processor'
 
 import { BaseBlock, Optional } from '@kodadot1/metasquid/types'
-import { CONTRACT_ADDRESS } from '../../constants'
+import { CONTRACT_ADDRESS, MARKETPLACE_ADDRESS } from '../../constants'
 import { addressOf } from './helper'
 import { decodeEvent } from './ink'
 import logger from './logger'
 import { matchNFTEvent } from './matcher'
-import { Context, MetaEvent, Processor, WithBlock } from './types'
+import { Context, ContractEvent, MetaEvent, Processor, WithBlock } from './types'
 
 type BaseEvent = MetaEvent
 type MagicItem = Processor & WithBlock
+type ItemWithName = { name: string }
 
 export function metaHandler(ctx: Context): BaseEvent[] {
   return ctx.blocks
@@ -30,6 +31,7 @@ function enhanceItems(items: Processor[], baseBlock: BaseBlock): BaseEvent[] {
   // eslint-disable-next-line id-length, @typescript-eslint/no-unsafe-return
   return items
     .filter(isEvent)
+    .filter(isContractEvent)
     .map(enhanceWithBlock)
     .map(toBaseEvent)
     .filter(notEmpty)
@@ -39,6 +41,10 @@ function enhanceItems(items: Processor[], baseBlock: BaseBlock): BaseEvent[] {
 
 function addBlock<T = Processor>(block: BaseBlock): (item: T) => T & WithBlock {
   return (item: T) => ({ ...item, block })
+}
+
+function isContractEvent(ctx: ItemWithName): boolean {
+  return ctx.name === 'Contracts.ContractEmitted'
 }
 
 function notEmpty<T>(value: T | null | undefined): value is T {
@@ -53,28 +59,43 @@ function toBase(ctx: BatchBlock<Processor>): BaseBlock {
 }
 
 function toBaseEvent(ctx: MagicItem): Optional<MetaEvent> {
-  logger.info(`[BASE EVENT]`, ctx)
+  logger.info(`[BASE EVENT] ${ctx}`)
   if (ctx.name === 'Contracts.ContractEmitted') {
     logger.info(
-      `[CONTRACT]`,
-      ctx.event.args.contract,
-      ctx.event.args.contract === CONTRACT_ADDRESS
+      `[CONTRACT]
+      ${ctx.event.args.contract},
+      IS ${ctx.event.args.contract === MARKETPLACE_ADDRESS}`
     )
+
+    const data = universalEvent(ctx.event)
+
+    logger.debug(`[CONTRACT EVENT] ${data}`)
   }
   if (
     ctx.name === 'Contracts.ContractEmitted' &&
     ctx.event.args.contract === CONTRACT_ADDRESS
   ) {
-    const item = ctx.event as ContractsContractEmittedEvent
-    const mayCaller = ctx.event.extrinsic?.signature?.address.value
-    const caller = addressOf(mayCaller);
+    const { item, caller, contract } = universalEvent(ctx.event)
     const event = decodeEvent(item)
-    const contract = addressOf(ctx.event.args.contract)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return matchNFTEvent({ event, contract, block: ctx.block, caller })
   }
 
   return null
+}
+
+
+function universalEvent<T>(event: ContractEvent) {
+  const item = event as ContractsContractEmittedEvent
+  const mayCaller = event.extrinsic?.signature?.address.value
+  const caller = addressOf(mayCaller);
+  const contract = addressOf(event.args.contract)
+
+  return {
+    item,
+    caller,
+    contract,
+  }
 }
 
 
