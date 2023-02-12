@@ -7,14 +7,14 @@ import {
 import { BaseBlock, Optional } from '@kodadot1/metasquid/types'
 import { CONTRACT_ADDRESS, MARKETPLACE_ADDRESS } from '../../constants'
 import { addressOf } from './helper'
-import { decodeEvent } from './ink'
+import { decodeEvent, decodeMarketEvent } from './ink'
 import logger from './logger'
-import { matchNFTEvent } from './matcher'
+import { matchMarketEvent, matchNFTEvent } from './matcher'
 import { Context, ContractEvent, MetaEvent, Processor, WithBlock } from './types'
 
 type BaseEvent = MetaEvent
 type MagicItem = Processor & WithBlock
-type ItemWithName = { name: string }
+type ItemWithName = { name: '*' | 'Contracts.ContractEmitted' }
 
 export function metaHandler(ctx: Context): BaseEvent[] {
   return ctx.blocks
@@ -59,29 +59,24 @@ function toBase(ctx: BatchBlock<Processor>): BaseBlock {
 }
 
 function toBaseEvent(ctx: MagicItem): Optional<MetaEvent> {
-  logger.info(`[BASE EVENT] ${ctx}`)
-  if (ctx.name === 'Contracts.ContractEmitted') {
-    logger.info(
-      `[CONTRACT]
-      ${ctx.event.args.contract},
-      IS ${ctx.event.args.contract === MARKETPLACE_ADDRESS}`
-    )
-
-    const data = universalEvent(ctx.event)
-
-    logger.debug(`[CONTRACT EVENT] ${data}`)
-  }
-  if (
-    ctx.name === 'Contracts.ContractEmitted' &&
-    ctx.event.args.contract === CONTRACT_ADDRESS
-  ) {
-    const { item, caller, contract } = universalEvent(ctx.event)
-    const event = decodeEvent(item)
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return matchNFTEvent({ event, contract, block: ctx.block, caller })
+  if (ctx.name !== 'Contracts.ContractEmitted') {
+    return null
   }
 
-  return null
+  const contractPublicKey = ctx.event.args.contract
+
+  const { item, caller, contract } = universalEvent(ctx.event)
+
+  switch (contractPublicKey) {
+    case MARKETPLACE_ADDRESS:
+      const marketEvent = decodeMarketEvent(item)
+      return matchMarketEvent({ event: marketEvent, contract, block: ctx.block, caller })
+    case CONTRACT_ADDRESS:
+      const event = decodeEvent(item)
+      return matchNFTEvent({ event, contract, block: ctx.block, caller })
+    default:
+      return null
+  }
 }
 
 
