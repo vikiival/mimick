@@ -1,4 +1,4 @@
-import singale from 'signale'
+import { logger } from '@kodadot1/metasquid/logger'
 
 type ErrorCallback = (error: Error) => void
 
@@ -9,4 +9,4 @@ export const logError = (e: Error | unknown, cb: ErrorCallback): void => {
 }
 
 // eslint-disable-next-line import/no-default-export
-export default singale
+export default logger
