@@ -68,3 +68,5 @@ export type WithEvent<T = RealEvent> = {
   event: T
 }
 export type SuperEvent<T = RealEvent> = WithEvent<T> & EventExtra
+
+export type SuperMarketEvent = SuperEvent<market.Event>
