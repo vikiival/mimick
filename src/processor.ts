@@ -1,7 +1,7 @@
 import { SubstrateBatchProcessor } from '@subsquid/substrate-processor'
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import 'dotenv/config'
-import {  STARTING_BLOCK, CONTRACT_ADDRESS, archive } from './constants'
+import {  STARTING_BLOCK, CONTRACT_ADDRESS, archive, MARKETPLACE_ADDRESS } from './constants'
 
 import { mainFrame } from './mappings'
 
@@ -9,7 +9,7 @@ const database = new Database()
 const processor = new SubstrateBatchProcessor()
 
 processor.setBlockRange({ from: STARTING_BLOCK })
-processor.addContractsContractEmitted(CONTRACT_ADDRESS, {
+processor.addContractsContractEmitted(MARKETPLACE_ADDRESS, {
   data: {
     event: {
       args: true,
