@@ -1,5 +1,6 @@
 import type {
   BatchProcessorItem,
+  ContractsContractEmittedEvent,
   SubstrateBatchProcessor
 } from '@subsquid/substrate-processor'
 import { BatchContext } from '@subsquid/substrate-processor'
@@ -55,6 +56,11 @@ export type Context = BatchContext<
   BatchProcessorItem<SubstrateBatchProcessor<Processor>>
 >
 export type MetaContext = Context
+
+
+export type ContractEvent = Omit<ContractsContractEmittedEvent, "name"> & {
+  name: "Contracts.ContractEmitted";
+}
 
 // export type Optional<T> = T | null;
 
