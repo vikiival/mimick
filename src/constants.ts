@@ -1,8 +1,8 @@
 import { lookupArchive } from '@subsquid/archive-registry'
 
 export const archive = lookupArchive('shibuya', { release: 'FireSquid' })
-export const STARTING_BLOCK = 2_790_000 // 6000 or 1790000 for Prod
+export const STARTING_BLOCK =  3_134_971 // 2_790_000 // 6000 or 1790000 for Prod
 export const CONTRACT_ADDRESS = '0xeaf190cfd509538fef398f13586e105293c70fbc18641943a2457c66274f2d3e'
   // '0xce18fa994c9c20b8892ba6dd8c19b108df272f6ac196944b95e664560f94a554'
-export const MARKETPLACE_ADDRESS = '0x5efcb0866430efccea4f0f701fe1244cfc0e977d164e0d7829f029d79f8707a2'
+export const MARKETPLACE_ADDRESS = '0x5dc592390a34480426a1249c3a7747fa96fc0c29864374743d78cd132c472ef2'
 export const FACTORY_ADDRESS = '0x0000000000000000000000000000000000000000000000000000000000000000'
