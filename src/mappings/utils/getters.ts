@@ -213,7 +213,7 @@ export function getBuyTokenEvent(event: Event_TokenBought, { block, caller, cont
     interaction: Interaction.BUY,
     event: eventFrom(Interaction.BUY, { ...block, caller }, '', price.toString()),
     state: {
-      price,
+      price: BigInt(0),
       updatedAt: block.timestamp
     },
   }
