@@ -18,9 +18,15 @@ import {
   // Event_AssetRemoved,
   // Event_AssetPrioritySet,
 } from '../../abi/psp34'
+import { 
+  Event_CollectionRegistered,
+  Event_TokenBought,
+  Event_TokenListed
+ } from '../../abi/marketplace'
 import { addressOf, idOf } from './helper'
 import { ChildSupport, whatIsThisTransfer } from './ink'
 import { EventExtra, Interaction, MetaEvent, tokenIdOf, TransferTokenEvent, WithId } from './types'
+import { CollectionEntity } from '../../model'
 
 
 // Every Getter should return object that contains: event, and data 
@@ -151,5 +157,64 @@ export function getChildRemovedEvent(event: Event_ChildRemoved) {
 export function getChildRejectedEvent(event: Event_ChildRejected) {
   return {
     ...childOf(event),
+  }
+}
+
+export function getCreateCollectionEvent(event: Event_CollectionRegistered, { block, caller }: EventExtra): MetaEvent<CollectionEntity> {
+  const contract = addressOf(event.contract)
+  return {
+    id: contract,
+    block,
+    contract,
+    interaction: Interaction.MINT,
+    event: eventFrom(Interaction.MINT, { ...block, caller }, '', block.blockNumber),
+    state: {
+      id: contract,
+      // hash: md5(id),
+      issuer: caller,
+      currentOwner: caller,
+      blockNumber: BigInt(block.blockNumber),
+      burned: false,
+      createdAt: block.timestamp,
+      updatedAt: block.timestamp
+    },
+  }
+}
+
+export function getListTokenEvent(event: Event_TokenListed, { block, caller, contract }: EventExtra): MetaEvent {
+  const collectionId = addressOf(event.contract)
+  const sn = idOf(event.id)
+  const id = tokenIdOf({ collectionId, sn })
+  const price = event.price || BigInt(0)
+
+  return {
+    id,
+    block,
+    contract,
+    interaction: Interaction.LIST,
+    event: eventFrom(Interaction.LIST, { ...block, caller }, '', price.toString()),
+    state: {
+      price,
+      updatedAt: block.timestamp
+    },
+  }
+}
+
+export function getBuyTokenEvent(event: Event_TokenBought, { block, caller, contract }: EventExtra): MetaEvent {
+  const collectionId = addressOf(event.contract)
+  const sn = idOf(event.id)
+  const id = tokenIdOf({ collectionId, sn })
+  const price = event.price || BigInt(0)
+
+  return {
+    id,
+    block,
+    contract,
+    interaction: Interaction.BUY,
+    event: eventFrom(Interaction.BUY, { ...block, caller }, '', price.toString()),
+    state: {
+      price,
+      updatedAt: block.timestamp
+    },
   }
 }
