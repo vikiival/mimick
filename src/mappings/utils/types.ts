@@ -144,9 +144,10 @@ export type WithCount = {
   count: bigint
 }
 
-export type MetaEvent = {
-  state: Partial<NFTEntity>
-  event: IEvent<Interaction>,
+
+export type MetaEvent<T = NFTEntity> = {
+  state: Partial<T>
+  event: IEvent<Interaction>
   block: BaseBlock
   // caller: string,
   id: string,
