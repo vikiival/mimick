@@ -144,6 +144,9 @@ export type WithCount = {
   count: bigint
 }
 
+export type KeyType = Interaction.MINT | Interaction.MINTNFT | 'REST'
+export type StateMap = Map<KeyType, MetaEvent[]>
+
 
 export type MetaEvent<T = NFTEntity> = {
   state: Partial<T>
