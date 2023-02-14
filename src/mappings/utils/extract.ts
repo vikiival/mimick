@@ -10,7 +10,7 @@ import { addressOf } from './helper'
 import { decodeEvent, decodeMarketEvent } from './ink'
 import logger from './logger'
 import { matchMarketEvent, matchNFTEvent } from './matcher'
-import { Context, ContractEvent, MetaEvent, Processor, WithBlock } from './types'
+import { Context, ContractEvent, Interaction, MetaEvent, Processor, StateMap, WithBlock } from './types'
 
 type BaseEvent = MetaEvent
 type MagicItem = Processor & WithBlock
@@ -24,6 +24,25 @@ export function metaHandler(ctx: Context): BaseEvent[] {
       return events
     })
     .flat()
+}
+
+export function toStateMap(events: BaseEvent[]): StateMap {
+  const stateMap: StateMap = new Map()
+
+  for (const iterator of events) {
+    const { interaction } = iterator
+    const key = interaction === Interaction.MINTNFT || interaction === Interaction.MINT ? interaction : 'REST'
+
+    const state = stateMap.get(key)
+    if (state) {
+      state.push(iterator)
+    } else {
+      stateMap.set(key, [iterator])
+    }
+    
+  }
+
+  return stateMap
 }
 
 function enhanceItems(items: Processor[], baseBlock: BaseBlock): BaseEvent[] {
