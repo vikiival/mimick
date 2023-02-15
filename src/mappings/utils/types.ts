@@ -14,7 +14,7 @@ import { EntityManager } from 'typeorm'
 
 import { BaseBlock, IEvent } from '@kodadot1/metasquid/types'
 import { Interaction } from '../../model/generated/_interaction'
-import { NFTEntity } from '../../model'
+import { CollectionEntity, NFTEntity } from '../../model'
 
 export type BaseCall = {
   caller: string
@@ -144,8 +144,16 @@ export type WithCount = {
   count: bigint
 }
 
-export type KeyType = Interaction.MINT | Interaction.MINTNFT | 'REST'
-export type StateMap = Map<KeyType, MetaEvent[]>
+export interface StateMapKey {
+  [Interaction.MINT]: MetaEvent<CollectionEntity>[]
+  [Interaction.MINTNFT]: MetaEvent<NFTEntity>[]
+  REST: MetaEvent<NFTEntity>[]
+}
+
+export class StateMap<T extends keyof StateMapKey> extends Map<
+  string,
+  StateMapKey[T]
+> {}
 
 
 export type MetaEvent<T = NFTEntity> = {
