@@ -46,13 +46,13 @@ export async function handleTokenCreate(log: Log, context: Process): Promise<voi
   final.currentOwner = addressOf(event.to)
   final.blockNumber = BigInt(base.blockNumber)
   final.collection = collection
-  final.sn = event.id.toString(); //BigInt(event.id.toString())
+  final.sn = event.id.toString();
   final.metadata = tokenUri(collection.baseUri, final.sn) || collection.metadata
   final.price = BigInt(0)
   final.burned = false
   final.createdAt = base.timestamp
   final.updatedAt = base.timestamp
-  final.version = 721//versionOf(context)
+  final.version = 721
   final.name = tokenName(collection.name, final.sn)
   // final.recipient = collection.recipient
   // final.royalty = collection.royalty
