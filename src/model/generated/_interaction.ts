@@ -1,10 +1,9 @@
 export enum Interaction {
-    MINT = "MINT",
-    MINTNFT = "MINTNFT",
-    LIST = "LIST",
-    UNLIST = "UNLIST",
+    BURN = "BURN",
     BUY = "BUY",
+    CREATE = "CREATE",
+    LIST = "LIST",
+    MINT = "MINT",
     SEND = "SEND",
-    CONSUME = "CONSUME",
-    DESTROY = "DESTROY",
+    UNLIST = "UNLIST",
 }

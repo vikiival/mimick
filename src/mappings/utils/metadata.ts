@@ -1,0 +1,18 @@
+import { contentFrom, type Content } from '@kodadot1/hyperdata'
+import { $obtain } from '@kodadot1/minipfs'
+import logger from './logger'
+export const BASE_URL = 'https://image.w.kodadot.xyz/'
+
+export const fetchMetadata = async <T extends Content>(metadata: string): Promise<T | undefined> => {
+  try {
+    if (!metadata) {
+      return undefined;
+    }
+    const value = await $obtain<T>(metadata, ['kodadot_beta'], true)
+    return contentFrom(value as any) as T
+  } catch (e) {
+    logger.error(`[MINIPFS] ${e}`)
+  }
+
+  return undefined
+}

@@ -1,5 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
-import * as marshal from "./marshal"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigIntColumn as BigIntColumn_, BooleanColumn as BooleanColumn_, ManyToOne as ManyToOne_, Index as Index_, DateTimeColumn as DateTimeColumn_, StringColumn as StringColumn_, OneToMany as OneToMany_, FloatColumn as FloatColumn_, IntColumn as IntColumn_} from "@subsquid/typeorm-store"
 import {CollectionEntity} from "./collectionEntity.model"
 import {Event} from "./event.model"
 import {MetadataEntity} from "./metadataEntity.model"
@@ -10,59 +9,68 @@ export class NFTEntity {
         Object.assign(this, props)
     }
 
-    @PrimaryColumn_()
-    id!: string
-
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    @BigIntColumn_({nullable: true})
     blockNumber!: bigint | undefined | null
 
-    @Column_("bool", {nullable: false})
+    @BooleanColumn_({nullable: false})
     burned!: boolean
 
     @Index_()
     @ManyToOne_(() => CollectionEntity, {nullable: true})
     collection!: CollectionEntity
 
-    @Column_("timestamp with time zone", {nullable: false})
+    @DateTimeColumn_({nullable: false})
     createdAt!: Date
 
     @Index_()
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     currentOwner!: string
 
     @OneToMany_(() => Event, e => e.nft)
     events!: Event[]
 
     @Index_()
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     hash!: string
 
-    @Column_("text", {nullable: false})
+    @PrimaryColumn_()
+    id!: string
+
+    @StringColumn_({nullable: true})
+    image!: string | undefined | null
+
+    @StringColumn_({nullable: false})
     issuer!: string
+
+    @StringColumn_({nullable: true})
+    media!: string | undefined | null
 
     @Index_()
     @ManyToOne_(() => MetadataEntity, {nullable: true})
     meta!: MetadataEntity | undefined | null
 
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     metadata!: string | undefined | null
 
     @Index_()
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     name!: string | undefined | null
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    @BigIntColumn_({nullable: true})
     price!: bigint | undefined | null
 
-    @Column_("numeric", {transformer: marshal.floatTransformer, nullable: true})
-    royalty!: number | undefined | null
-
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     recipient!: string | undefined | null
 
-    @Column_("text", {nullable: false})
+    @FloatColumn_({nullable: true})
+    royalty!: number | undefined | null
+
+    @StringColumn_({nullable: false})
     sn!: string
 
-    @Column_("timestamp with time zone", {nullable: false})
+    @DateTimeColumn_({nullable: false})
     updatedAt!: Date
+
+    @IntColumn_({nullable: false})
+    version!: number
 }
