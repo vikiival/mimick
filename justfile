@@ -1,13 +1,19 @@
+default := 'squid'
+types := 'typegen'
+
 set dotenv-load
 
-process: build
-	node -r dotenv/config lib/processor.js
+process:
+	@npx sqd process
 
 serve:
 	@npx squid-graphql-server
 
-up:
-  docker compose up
+up *FLAGS:
+  docker compose up {{FLAGS}}
+
+upd:
+	@just up -d
 
 pull:
   docker compose pull
@@ -35,7 +41,7 @@ explore:
 		--archive $ARCHIVE_URL \
 		--out kusamaVersions.jsonl
 
-bug: down up
+bug: down upd
 
 reset: migrate
 
@@ -51,6 +57,8 @@ migrate:
 
 update-db:
 	npx squid-typeorm-migration generate
+
+db: update-db migrate
 
 test:
   npm run test:unit
@@ -83,4 +91,4 @@ ink FILE OUT:
   npx squid-ink-typegen --abi=src/abi/{{FILE}}.json --output=src/abi/{{OUT}}.ts
 
 psp TAG:
-	npx squid-ink-typegen --abi=src/abi/ERC{{TAG}}.json --output=src/abi/erc{{TAG}}.ts
+	npx squid-ink-typegen --abi=src/abi/erc{{TAG}}.json --output=src/abi/erc{{TAG}}.ts
