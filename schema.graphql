@@ -1,22 +1,33 @@
 type CollectionEntity @entity {
-  id: ID!
   blockNumber: BigInt
   createdAt: DateTime!
   currentOwner: String!
-  burned: Boolean!
+  distribution: Int! # dummy
   events: [CollectionEvent!] @derivedFrom(field: "collection")
+  floor: BigInt! # dummy
+  hash: String! @unique
+  highestSale: BigInt! # dummy
+  id: ID!
+  image: String
   issuer: String!
+  max: Int
+  media: String
   meta: MetadataEntity
   metadata: String
   name: String @index
+  nftCount: Int! # dummy
   nfts: [NFTEntity!] @derivedFrom(field: "collection")
+  ownerCount: Int! # dummy
+  supply: Int! # dummy
+  baseUri: String
+  symbol: String # dummy
+  type: CollectionType!
   updatedAt: DateTime!
-  nftCount: Int!
-  supply: Int!
+  version: Int! # dummy
+  volume: BigInt! # dummy
 }
 
 type NFTEntity @entity {
-  id: ID!
   blockNumber: BigInt
   burned: Boolean!
   collection: CollectionEntity!
@@ -24,16 +35,21 @@ type NFTEntity @entity {
   currentOwner: String! @index
   events: [Event!] @derivedFrom(field: "nft")
   hash: String! @index
+  id: ID!
+  image: String
   issuer: String!
+  # lewd: Boolean!
+  media: String
   meta: MetadataEntity
   metadata: String
   name: String @index
   price: BigInt
-  royalty: Float
   recipient: String
+  royalty: Float
   sn: String!
   updatedAt: DateTime!
-  # type: ClassType!
+  version: Int!
+  # token: TokenEntity!
 }
 
 type MetadataEntity @entity {
@@ -84,14 +100,17 @@ type CollectionEvent implements EventType @entity {
   collection: CollectionEntity!
 }
 
+enum CollectionType {
+  ERC721
+  ERC1155
+}
 
 enum Interaction {
-  MINT
-  MINTNFT
-  LIST
-  UNLIST
+  BURN
   BUY
+  CREATE
+  LIST
+  MINT
   SEND
-  CONSUME
-  DESTROY
+  UNLIST
 }
