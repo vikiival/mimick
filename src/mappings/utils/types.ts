@@ -1,38 +1,37 @@
 import type {
-  BatchProcessorItem,
+  BlockHeader,
+  DataHandlerContext,
   SubstrateBatchProcessor,
+  SubstrateBatchProcessorFields,
+  Block as _Block,
+  Call as _Call,
+  Event as _Event,
+  Extrinsic as _Extrinsic
 } from '@subsquid/substrate-processor'
-import { BatchContext } from '@subsquid/substrate-processor'
-import {
-  AddEventItem,
-  CallItem,
-  EventItem,
-} from '@subsquid/substrate-processor/lib/interfaces/dataSelection'
-import md5 from 'md5'
+import { Store as SquidStore } from '@subsquid/typeorm-store'
 import { nanoid } from 'nanoid'
 import { EntityManager } from 'typeorm'
 
 import { Interaction } from '../../model/generated/_interaction'
-import { Attribute } from '../../model/generated/_attribute'
+import { IEvent } from '@kodadot1/metasquid/types'
 
 export type BaseCall = {
   caller: string
   blockNumber: string
   timestamp: Date
 }
-
 export { Interaction }
 
-// export function eventFrom<T>(interaction: T, { blockNumber, caller, timestamp }: BaseCall, meta: string, currentOwner?: string): IEvent<T> {
-//   return {
-//     interaction,
-//     blockNumber: BigInt(blockNumber),
-//     caller,
-//     currentOwner: currentOwner ?? caller,
-//     timestamp,
-//     meta,
-//   };
-// }
+export function eventFrom<T>(interaction: T, { blockNumber, caller, timestamp }: BaseCall, meta: string, currentOwner?: string): IEvent<T> {
+  return {
+    interaction,
+    blockNumber: BigInt(blockNumber),
+    caller,
+    currentOwner: currentOwner ?? caller,
+    timestamp,
+    meta,
+  };
+}
 
 // export function attributeFrom(attribute: MetadataAttribute): Attribute {
 //   return new Attribute({}, {
@@ -42,23 +41,56 @@ export { Interaction }
 //   });
 // }
 
-export type Processor = AddEventItem<
-  EventItem<'*', false> | CallItem<'*', false>,
-  EventItem<
-    'Contracts.ContractEmitted',
-    {
-      readonly event: {
-        readonly args: true
-      }
-    }
-  >
->
-export type Store = EntityManager
-export type Context = BatchContext<
-  Store,
-  BatchProcessorItem<SubstrateBatchProcessor<Processor>>
->
+export const fieldSelection = {
+  block: {
+    timestamp: true
+  },
+  extrinsic: {
+    signature: true,
+  },
+  call: {
+      name: true,
+      args: true,
+      origin: true
+  },
+  event: {
+      topics: true,
+      name: true,
+      args: true,
+  }
+} as const
+
+export type SelectedFields = typeof fieldSelection
+
+type Fields = SubstrateBatchProcessorFields<SubstrateBatchProcessor<SelectedFields>>
+export type Block = _Block<Fields>
+export type Event = _Event<Fields>
+export type Call = _Call<Fields>
+export type Extrinsic = _Extrinsic<Fields>
+export type ManagedStore = SquidStore & { em: () => EntityManager }
+export type Store =  SquidStore // & { em: () => EntityManager }
+export type BatchContext<S = Store> = DataHandlerContext<Store, Fields>
+// export type Context = BatchContext<
+//   Store,
+//   BatchProcessorItem<SubstrateBatchProcessor<Processor>>
+// >
+
+// export type Context<Store> = DataHandlerContext<Store, Fields>
+
 export type MetaContext = Context
+export type SelectedBlock = BlockHeader<Fields>
+export type SelectedEvent = Event
+export type SelectedExtrinsic = Extrinsic
+export type SelectedCall = Call
+
+export type Context<S = Store>  = {
+  store: S
+  block: SelectedBlock
+  event: SelectedEvent
+  extrinsic: SelectedExtrinsic | undefined
+  call: SelectedCall | undefined
+  // log: Logger
+}
 
 // export type Optional<T> = T | null;
 
