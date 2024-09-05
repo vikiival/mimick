@@ -28,10 +28,9 @@ export async function handleMetadata(id: string, store: Store): Promise<Optional
     description: metadata.description || '',
     image: metadata.image || metadata.thumbnail,
     animationUrl: metadata.animationUrl,
-    attributes: [], //metadata.attributes?.map(attributeFrom) || [],
+    attributes: [],
     name: metadata.name || '',
     type: metadata.type || '',
-    // banner: metadata.banner || '',
   }
 
   const final = create<Metadata>(Metadata, id, partial)
