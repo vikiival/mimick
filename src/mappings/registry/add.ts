@@ -34,8 +34,6 @@ export function toMap(
   };
 }
 
-
-const OPERATION = 'CREATE' //Interaction.CREATE
 const BASE_URI = `https://dyndata.deno.dev/${CHAIN}/content/`
 
 export const ContractsMap: Record<string, any> = {
