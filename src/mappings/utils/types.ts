@@ -33,13 +33,6 @@ export function eventFrom<T>(interaction: T, { blockNumber, caller, timestamp }:
   };
 }
 
-// export function attributeFrom(attribute: MetadataAttribute): Attribute {
-//   return new Attribute({}, {
-//     display: String(attribute.display_type),
-//     trait: String(attribute.trait_type),
-//     value: String(attribute.value),
-//   });
-// }
 
 export const fieldSelection = {
   block: {
@@ -91,17 +84,6 @@ export type Context<S = Store>  = {
   call: SelectedCall | undefined
   // log: Logger
 }
-
-// export type Optional<T> = T | null;
-
-// export interface IEvent<T = OneOfInteraction> {
-//   interaction: T;
-//   blockNumber: bigint,
-//   caller: string,
-//   currentOwner: string,
-//   timestamp: Date,
-//   meta: string;
-// }
 
 export type BaseCollectionEvent = WithCaller & {
   id: string
